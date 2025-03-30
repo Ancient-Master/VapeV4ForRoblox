@@ -1,5 +1,5 @@
 local vape = shared.vape
-
+local Affe
 local test = vape.Categories.Combat:CreateModule({
     Name = 'Test',
     Function = function(callback)
@@ -9,7 +9,7 @@ local test = vape.Categories.Combat:CreateModule({
     Tooltip = 'This is a test module'
 })
 
-local Affe
+
 Affe = vape.Categories.Combat:CreateModule({
 	Name = 'teststuff',
     Tooltip = 'Hi! This is a tooltip.',

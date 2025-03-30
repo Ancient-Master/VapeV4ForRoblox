@@ -1,6 +1,6 @@
 local vape = shared.vape
 local Affe
-local toggle
+
 local test = vape.Categories.Combat:CreateModule({
     Name = 'Test',
     Function = function(callback)

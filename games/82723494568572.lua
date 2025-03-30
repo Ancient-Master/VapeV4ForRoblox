@@ -1,13 +1,20 @@
 local vape = shared.vape
 local Affe
+local toggle
 local test = vape.Categories.Combat:CreateModule({
     Name = 'Test',
     Function = function(callback)
         print(callback, 'module enabled!')
         Affe:Toggle()
-
     end,
     Tooltip = 'This is a test module'
+})
+toggle = test:CreateToggle({
+    Name = 'Custom Properties',
+    Function = function(callback)
+        print(callback, 'toggle enabled!')
+    end,
+    Tooltip = 'This is a test toggle.'
 })
 
 Affe = vape.Categories.Combat:CreateModule({
@@ -24,3 +31,6 @@ Affe = vape.Categories.Combat:CreateModule({
 	ExtraText = function() return 'Test' end,
 	Tooltip = 'This is a test module.'
 })
+
+
+

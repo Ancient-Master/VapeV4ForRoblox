@@ -12,7 +12,7 @@ local test = vape.Categories.Combat:CreateModule({
 local Affe
 Affe = vape.Categories.Combat:CreateModule({
 	Name = 'teststuff',
-    Tooltip = 'Hi! This is a tooltip.'
+    Tooltip = 'Hi! This is a tooltip.',
 	Function = function(callback)
 		print(callback, 'module state')
 		Affe:Clean(Instance.new('Part'))

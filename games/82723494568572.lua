@@ -1,7 +1,7 @@
 local vape = shared.vape
 
 local test = vape.Categories.Combat:CreateModule({
-    Name = 'AimAssist',
+    Name = 'Test',
     Function = function(callback)
         print(callback, 'module enabled!')
     end,

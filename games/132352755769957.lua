@@ -17,30 +17,3 @@ local function downloadFile(path, func)
 	return (func or readfile)(path)
 end
 
-local cloneref = cloneref or function(obj) return obj end
-
-local playersService = cloneref(game:GetService('Players'))
-local lplr = playersService.LocalPlayer
-local vape = shared.vape
-local entitylib = vape.Libraries.entity
-local targetinfo = vape.Libraries.targetinfo
-
-local test = vape.Categories.Blatant:CreateModule({
-    Name = 'Killaura',
-    Function = function(callback)
-        print(callback, 'module enabled!')
-    end,
-local plrs = entitylib.AllPosition({
-	Players = Targets.Players.Enabled
-})
-repeat
-if #plrs > 0 then
-	local selfpos = entitylib.character.RootPart.Position
-	local localfacing = entitylib.character.RootPart.CFrame.LookVector * Vector3.new(1, 0, 1)
-
-	task.wait()
-end
-until not Killaura.Enabled
-Tooltip = 'Attack players around you\nwithout aiming at them.'
-})
-Targets = Killaura:CreateTargets({Players = true})

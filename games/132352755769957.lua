@@ -31,7 +31,6 @@ local test = vape.Categories.Blatant:CreateModule({
         print(callback, 'module enabled!')
     end,
 local plrs = entitylib.AllPosition({
-	Part = 'RootPart',
 	Players = Targets.Players.Enabled,
 })
 repeat

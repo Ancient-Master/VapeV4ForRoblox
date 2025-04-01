@@ -26,5 +26,22 @@ local test = vape.Categories.Blatant:CreateModule({
     Function = function(callback)
         print(callback, 'module enabled!')
     end,
-    Tooltip = 'This is a test module'
+local plrs = entitylib.AllPosition({
+	Range = SwingRange.Value,
+	Wallcheck = Targets.Walls.Enabled or nil,
+	Part = 'RootPart',
+	Players = Targets.Players.Enabled,
+	NPCs = Targets.NPCs.Enabled,
+	Limit = Max.Value
 })
+repeat
+if #plrs > 0 then
+	local selfpos = entitylib.character.RootPart.Position
+	local localfacing = entitylib.character.RootPart.CFrame.LookVector * Vector3.new(1, 0, 1)
+
+	task.wait()
+end
+until not Killaura.Enabled
+Tooltip = 'Attack players around you\nwithout aiming at them.'
+})
+Targets = Killaura:CreateTargets({Players = true})

@@ -27,12 +27,10 @@ local test = vape.Categories.Blatant:CreateModule({
         print(callback, 'module enabled!')
     end,
 local plrs = entitylib.AllPosition({
-	Range = SwingRange.Value,
 	Wallcheck = Targets.Walls.Enabled or nil,
 	Part = 'RootPart',
 	Players = Targets.Players.Enabled,
 	NPCs = Targets.NPCs.Enabled,
-	Limit = Max.Value
 })
 repeat
 if #plrs > 0 then

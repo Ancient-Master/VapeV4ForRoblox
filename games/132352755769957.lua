@@ -31,7 +31,7 @@ local test = vape.Categories.Blatant:CreateModule({
         print(callback, 'module enabled!')
     end,
 local plrs = entitylib.AllPosition({
-	Players = Targets.Players.Enabled,
+	Players = Targets.Players.Enabled
 })
 repeat
 if #plrs > 0 then

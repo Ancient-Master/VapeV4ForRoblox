@@ -6010,18 +6010,18 @@ run(function()
 end)
 	
 run(function()
-	local Blink
+	local Portmaster
 	local Type
 	local AutoSend
 	local AutoSendLength
 	local oldphys, oldsend
 	
-	Blink = vape.Categories.Utility:CreateModule({
-		Name = 'Blink',
+	Portmaster = vape.Categories.Utility:CreateModule({
+		Name = 'Portmaster',
 		Function = function(callback)
 			if callback then
 				local teleported
-				Blink:Clean(lplr.OnTeleport:Connect(function()
+				Portmaster:Clean(lplr.OnTeleport:Connect(function()
 					setfflag('S2PhysicsSenderRate', '15')
 					setfflag('DataSenderRate', '60')
 					teleported = true
@@ -6040,7 +6040,7 @@ run(function()
 					end
 					
 					task.wait(0.03)
-				until (not Blink.Enabled and not teleported)
+				until (not Portmaster.Enabled and not teleported)
 			else
 				if setfflag then
 					setfflag('S2PhysicsSenderRate', '15')
@@ -6051,19 +6051,19 @@ run(function()
 		end,
 		Tooltip = 'Chokes packets until disabled.'
 	})
-	Type = Blink:CreateDropdown({
+	Type = Portmaster:CreateDropdown({
 		Name = 'Type',
 		List = {'Movement Only', 'All'},
 		Tooltip = 'Movement Only - Only chokes movement packets\nAll - Chokes remotes & movement'
 	})
-	AutoSend = Blink:CreateToggle({
+	AutoSend = Portmaster:CreateToggle({
 		Name = 'Auto send',
 		Function = function(callback)
 			AutoSendLength.Object.Visible = callback
 		end,
 		Tooltip = 'Automatically send packets in intervals'
 	})
-	AutoSendLength = Blink:CreateSlider({
+	AutoSendLength = Portmaster:CreateSlider({
 		Name = 'Send threshold',
 		Min = 0,
 		Max = 1,

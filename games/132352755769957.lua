@@ -17,9 +17,13 @@ local function downloadFile(path, func)
 	return (func or readfile)(path)
 end
 
+local cloneref = cloneref or function(obj) return obj end
 
+local playersService = cloneref(game:GetService('Players'))
+local lplr = playersService.LocalPlayer
 local vape = shared.vape
 local entitylib = vape.Libraries.entity
+local targetinfo = vape.Libraries.targetinfo
 
 local test = vape.Categories.Blatant:CreateModule({
     Name = 'Killaura',

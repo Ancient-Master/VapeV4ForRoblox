@@ -21,8 +21,8 @@ end
 local vape = shared.vape
 local entitylib = vape.Libraries.entity
 
-local test = vape.Categories.Combat:CreateModule({
-    Name = 'Kill Aura',
+local test = vape.Categories.Blatant:CreateModule({
+    Name = 'Killaura',
     Function = function(callback)
         print(callback, 'module enabled!')
     end,

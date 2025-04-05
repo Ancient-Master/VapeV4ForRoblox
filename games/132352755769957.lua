@@ -114,6 +114,7 @@ local HitmanModule = vape.Categories.Combat:CreateModule({
 local HitmanModuleTextbox = HitmanModule:CreateTextBox({
     Name = 'Target Player',
     Function = function(enter)
+		print("Text box input:", enter) -- Debug
         getgenv().HitmanTargetPlayer = enter
     end,
     Placeholder = 'Player Name',

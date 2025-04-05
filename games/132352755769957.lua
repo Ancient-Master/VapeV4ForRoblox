@@ -39,7 +39,7 @@ local function checkForTarget()
 	if target then
 		if string.lower(target.player.Name) == string.lower(TARGET_USERNAME) then
 			print("\n🎯 Successfully found target:", target.player.Name)
-			LocalPlayer.Character:FindFirstChild("HumanoidRootPart").CFrame = pos
+
 			spin:Toggle()
 		else
 			print("Found wrong target:", target.player.Name)
@@ -60,8 +60,8 @@ spin = vape.Categories.Combat:CreateModule({
 
             checkForTarget()
         else
-			LocalPlayer.Character:FindFirstChild("HumanoidRootPart").CFrame = pos
-            print("Spin disabled")
+			LocalPlayer.Character:FindFirstChild("HumanoidRootPart").CFrame = CFrame.new(pos)
+			            print("Spin disabled")
             -- Clean up when disabled if needed
         end
      

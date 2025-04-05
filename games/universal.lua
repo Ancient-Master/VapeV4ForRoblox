@@ -6185,70 +6185,90 @@ run(function()
 		Tooltip = 'Disables GetPropertyChangedSignal detections for movement'
 	})
 end)
-run(function()
-    local platformPart = nil -- Store the platform reference
 
-    local Platform = vape.Categories.Utility:CreateModule({
-        Name = 'Platform in the Sky',
-        Function = function(callback)
-            if callback then
-                -- Create the platform if it doesn't exist
-                if not platformPart or not platformPart.Parent then
-                    platformPart = Instance.new('Part')
-                    platformPart.Size = Vector3.new(100, 1, 100)
-                    platformPart.Position = Vector3.new(0, slider.Value, 0)
-                    platformPart.Anchored = true
-                    platformPart.Parent = workspace
-                    platformPart.Material = Enum.Material.SmoothPlastic
-                    platformPart.Color = Color3.fromRGB(255, 255, 255)
-                    platformPart.CanCollide = true
-                    platformPart.Name = "VapeSkyPlatform" -- Helps identify it
-                end
-            else
-                -- Delete the platform if it exists
-                if platformPart and platformPart.Parent then
-                    platformPart:Destroy()
-                    platformPart = nil
-                end
-            end
-        end,
-        Tooltip = 'Creates a platform in the sky'
-    })
-    
-    local slider = Platform:CreateSlider({
-        Name = 'Platform Height',
-        Min = 0,
-        Max = 1000,
-        Default = 1000,
-        Function = function(val)
-            if platformPart and platformPart.Parent then
-                platformPart.Position = Vector3.new(0, val, 0)
-            end
-        end,
-        Decimal = 10
-    })
-    
-    local slider2 = Platform:CreateSlider({
-        Name = 'Platform Size',
-        Min = 1, -- Minimum size 1 to prevent errors
-        Max = 1000,
-        Default = 100,
-        Function = function(val)
-            if platformPart and platformPart.Parent then
-                platformPart.Size = Vector3.new(val, 1, val)
-            end
-        end,
-        Decimal = 10
-    })
+	run(function()
+		local platformPart = nil -- Store the platform reference
+		local slider, slider2 -- Declare sliders first
+	
+		local Platform = vape.Categories.Utility:CreateModule({
+			Name = 'Platform in the Sky',
+			Function = function(callback)
+				if callback then
+					-- Create the platform if it doesn't exist
+					if not platformPart or not platformPart.Parent then
+						platformPart = Instance.new('Part')
+						platformPart.Size = Vector3.new(100, 1, 100)
+						platformPart.Position = Vector3.new(0, slider and slider.Value or 1000, 0) -- Fallback to 1000 if slider not ready
+						platformPart.Anchored = true
+						platformPart.Parent = workspace
+						platformPart.Material = Enum.Material.SmoothPlastic
+						platformPart.Color = Color3.fromRGB(255, 255, 255)
+						platformPart.CanCollide = true
+						platformPart.Name = "VapeSkyPlatform"
+					end
+				else
+					-- Delete the platform if it exists
+					if platformPart and platformPart.Parent then
+						platformPart:Destroy()
+						platformPart = nil
+					end
+				end
+			end,
+			Tooltip = 'Creates a platform in the sky'
+		})
+		
+		slider = Platform:CreateSlider({
+			Name = 'Platform Height',
+			Min = 0,
+			Max = 1000,
+			Default = 1000,
+			Function = function(val)
+				if platformPart and platformPart.Parent then
+					platformPart.Position = Vector3.new(0, val, 0)
+				end
+			end,
+			Decimal = 10
+		})
+		
+		slider2 = Platform:CreateSlider({
+			Name = 'Platform Size',
+			Min = 1,
+			Max = 1000,
+			Default = 100,
+			Function = function(val)
+				if platformPart and platformPart.Parent then
+					platformPart.Size = Vector3.new(val, 1, val)
+				end
+			end,
+			Decimal = 10
+		})
+	
+		local teleport = Platform:CreateButton({
+			Name = 'Teleport to Platform',
+			Function = function()
+				if entitylib.isAlive and platformPart and platformPart.Parent then
+					entitylib.character.RootPart.CFrame = CFrame.new(0, (slider and slider.Value or 1000) + 10, 0)
+				end
+			end
+		})
+	end)
+	
+	-- Panic button (unchanged, works fine)
+	run(function()
+		vape.Categories.Utility:CreateModule({
+			Name = 'Panic',
+			Function = function(callback)
+				if callback then
+					for _, v in vape.Modules do
+						if v.Enabled then
+							v:Toggle()
+						end
+					end
+				end
+			end,
+			Tooltip = 'Disables all currently enabled modules'
+		})
 
-    local teleport = Platform:CreateButton({
-        Name = 'Teleport to Platform',
-        Function = function()
-            if entitylib.isAlive and platformPart and platformPart.Parent then
-                entitylib.character.RootPart.CFrame = CFrame.new(0, slider.Value + 10, 0)
-            end
-        end
-    })
 end)
 run(function()
 	vape.Categories.Utility:CreateModule({

@@ -131,10 +131,13 @@ Killaura = vape.Categories.Combat:CreateModule({
 							if entitylib.isVulnerable then
 							targetinfo.Targets[v] = tick() + 1
 							if Downed.Enabled then
-							if not LocalPlayer.character:FindFirstChild("Glass Fragment") then
-								LocalPlayer.Backpack:FindFirstChild("Glass Fragment") = LocalPlayer.Character
+								if not LocalPlayer.Character:FindFirstChild("Glass Fragment") then
+									local glassFragment = LocalPlayer.Backpack:FindFirstChild("Glass Fragment")
+									if glassFragment then
+										glassFragment.Parent = LocalPlayer.Character
+									end
+								end
 							end
-						end
 						for i = 1, 3 do
 							coroutine.wrap(function()
 							local args = {

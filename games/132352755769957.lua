@@ -95,7 +95,7 @@ local function startHitmanTargetSkipper(config)
                 HitmanShared.removeTarget()
                 HitmanShared.findNewTarget()
             else
-				vape:CreateNotification('Vape','✅ Accepted Target: ' .. target.player.Name .. " (Lv. " .. target.level .. ")",5, 'alert')+
+				vape:CreateNotification('Vape','✅ Accepted Target: ' .. target.player.Name .. " (Lv. " .. target.level .. ")",5, 'alert')
 				print("Accepted Target: " .. target.player.Name .. " (Lv. " .. target.level .. ")")
 				HitmanModule:Toggle()
 					LocalPlayer.Character.HumanoidRootPart.CFrame = originalPosition

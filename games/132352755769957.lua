@@ -132,7 +132,7 @@ Killaura = vape.Categories.Combat:CreateModule({
 							targetinfo.Targets[v] = tick() + 1
 							if Downed.Enabled then
 							if not LocalPlayer.character:FindFirstChild("Glass Fragment") then
-								LocalPlayer.Backpack:FindFirstChild("Glass Fragment") = LocalPlayer.Character:FindFirstChild("Glass Fragment")
+								LocalPlayer.Backpack:FindFirstChild("Glass Fragment") = LocalPlayer.Character
 							end
 						end
 						for i = 1, 3 do

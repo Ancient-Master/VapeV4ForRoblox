@@ -130,6 +130,11 @@ Killaura = vape.Categories.Combat:CreateModule({
 						if entitylib.isAlive then            
 							if entitylib.isVulnerable then
 							targetinfo.Targets[v] = tick() + 1
+							if Downed.Enabled then
+							if not LocalPlayer.character:FindFirstChild("Glass Fragment") then
+								LocalPlayer.Backpack:FindFirstChild("Glass Fragment") = LocalPlayer.Character:FindFirstChild("Glass Fragment")
+							end
+						end
 						for i = 1, 3 do
 							coroutine.wrap(function()
 							local args = {
@@ -152,7 +157,7 @@ Killaura = vape.Categories.Combat:CreateModule({
 })
 
 Targets = Killaura:CreateTargets({Players = true})
-Mouse = Killaura:CreateToggle({Name = 'Equip Weapon If downed'})
+Downed = Killaura:CreateToggle({Name = 'Equip Weapon If downed'})
 
 AttackRange = Killaura:CreateSlider({
     Name = 'Attack range',

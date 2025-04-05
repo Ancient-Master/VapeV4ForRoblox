@@ -74,10 +74,10 @@ local function checkForTarget()
                 end)()
             end
             until not killa.Enabled or game.Players.LocalPlayer.Character.Humanoid.Health <= 0 or target.Player.Character.Humanoid.Health <= 0 
-        end
             end
         end
             spin:Toggle()
+    end
     end
 
         else

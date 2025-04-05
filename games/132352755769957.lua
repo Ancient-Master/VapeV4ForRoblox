@@ -93,29 +93,27 @@ local function startHitmanTargetSkipper(config)
         end
     end)
 end
-local HitmanModule
 local HitmanModule = vape.Categories.Combat:CreateModule({
     Name = 'Hitman Target Set',
     Function = function(callback)
-		getgenv().HitmanTarget = callback
+        HitmanTargetEnabled = callback
         if callback then
             startHitmanTargetSkipper({
                 SkipIfLevelBelow = 0,
-                DesiredPlayer = getgenv().HitmanTargetPlayer
+                DesiredPlayer = HitmanTargetPlayer
             })
         else
-            -- Add disable functionality here if needed
             vape:CreateNotification('Vape', "Hitman Target Skipper disabled", 5)
         end
     end,
     Tooltip = 'Automatically skips unwanted hitman targets'
 })
-local HitmanModuleTextbox
+
 local HitmanModuleTextbox = HitmanModule:CreateTextBox({
     Name = 'Target Player',
-    Function = function(enter)
-		print(HitmanModuleTextbox.Value, enter, 'textbox value set')
-        getgenv().HitmanTargetPlayer = HitmanModuleTextbox.Value
+    Function = function(text)
+        HitmanTargetPlayer = tostring(text)
+        vape:CreateNotification('Vape', "Target set to: " .. (HitmanTargetPlayer or "None"), 3)
     end,
     Placeholder = 'Player Name',
     Tooltip = 'Enter the name of the player you want as your target.'

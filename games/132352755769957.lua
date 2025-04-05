@@ -36,6 +36,7 @@ local Namespaces = require(ReplicatedStorage.Service.Namespaces)
 local spin
 local username123
 local Targets
+local affe
 local notp
 local TARGET_USERNAME
 local originalPosition
@@ -59,26 +60,9 @@ local function checkForTarget()
     if target then
         if string.lower(target.player.Name) == string.lower(TARGET_USERNAME) then
             notif('Vape', "Successfully found target: " .. target.player.Name, 5)
-
-
-                while target.player.Character and target.player.Character:FindFirstChild("Humanoid") and target.player.Character.Humanoid.Health > 0 and killa.Enabled do
-                    LocalPlayer.Character.HumanoidRootPart.CFrame = target.player.Character.HumanoidRootPart.CFrame
-                    
-                    for i = 1, 3 do
-                        coroutine.wrap(function()
-                            local args = {
-                                target.Player.Character.Humanoid,
-                                target.Player.Character.Head,
-                                LocalPlayer.Character:FindFirstChildOfClass("Tool") or nil
-                            }
-                            Namespaces.MeleeReplication.packets.sendHit.send(args)
-                        end)()
-                    end
-                    
-                    task.wait()
-
-            end
+            if not killa.Enabled then
             spin:Toggle()
+            end
         else
             notif('Vape', "Found wrong target: " .. target.player.Name, 3, 'warning')
             checkForTarget()
@@ -99,6 +83,27 @@ spin = vape.Categories.Combat:CreateModule({
 			end
 
             checkForTarget()
+            if killa.Enabled then 
+                repeat
+                local target = HitmanShared.getCurrentTarget()
+                LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(target.player.Character.HumanoidRootPart.Position)
+                targetinfo.Targets[target] = tick() + 1
+                if target then
+                    local args = {
+                        target.player.Character.Humanoid,
+                        target.player.Character.Head,
+                        LocalPlayer.Character:FindFirstChildOfClass("Tool") or nil
+                    }
+                    Namespaces.MeleeReplication.packets.sendHit.send(args)
+                end
+            end
+            task.wait()
+        until target.player.Character.Humanoid.Health <= 0 or not killa.Enabled or localPlayer.Character.Humanoid.Health <= 0
+            end
+        else
+            if not notp.Enabled then
+                LocalPlayer.Character.HumanoidRootPart.CFrame = originalPosition
+            end
         else
 			            print("Spin disabled")
 						if not notp.Enabled then

@@ -23,6 +23,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local LocalPlayer = Players.LocalPlayer
 local HitmanShared = require(ReplicatedStorage.Features.Hitman.HitmanShared)
 local entitylib = vape.Libraries.entity
+local Namespaces = require(ReplicatedStorage.Service.Namespaces)
 local spin
 local username
 local Targets
@@ -32,6 +33,8 @@ local originalPosition
 local test
 local Angle
 local AttackRange
+local Max
+local Killaura
 
 local function checkForTarget()
 	if not spin.Enabled then return end
@@ -100,43 +103,122 @@ notp = spin:CreateToggle({
     Tooltip = 'Disables teleporting you have to stay near the bounty npc.'
 })
 
-test = vape.Categories.Combat:CreateModule({
-    Name = 'test',
+Killaura = vape.Categories.Combat:CreateModule({
+    Name = 'Killaura',
     Function = function(callback)
+		if Mouse.Enabled then
+			if inputService:IsMouseButtonPressed(0) then return false end
+		end
         if callback then
-            repeat
-                local plrs = entitylib.AllPosition({
-                    Range = AttackRange.Value,
-                    Wallcheck = Targets.Walls.Enabled or nil,
-                    Part = 'RootPart',
-                    Players = Targets.Players.Enabled
-                })
+			repeat
+				local plrs = entitylib.AllPosition({
+					Range = AttackRange.Value,
+					Wallcheck = Targets.Walls.Enabled or nil,
+					Part = 'RootPart',
+					Players = Targets.Players.Enabled,
+					Limit = Max.Value
+				})
+				local switched = false
 
-                task.wait()
-            until not test.Enabled
-        end
-    end,
+				if #plrs > 0 then
+					local localfacing = entitylib.character.RootPart.CFrame.LookVector * Vector3.new(1, 0, 1)
+
+					for i, v in plrs do
+						local delta = (v.RootPart.Position - entitylib.character.RootPart.Position)
+						local angle = math.acos(localfacing:Dot((delta * Vector3.new(1, 0, 1)).Unit))
+						if angle > (math.rad(AngleCheck.Value) / 2) then continue end
+						table.insert(attacked, v)
+						targetinfo.Targets[v] = tick() + 1
+
+						--if not Swing.Enabled then
+						--	skywars.MeleeController:playAnimation(lplr.Character, tool)
+						--end
+
+						local args = {
+							v.Player.Character.Humanoid,
+							v.Player.Character.Torso,
+							LocalPlayer.Character:FindFirstChild("Glass Shard")
+						}
+						Namespaces.MeleeReplication.packets.sendHit.send(args)
+					end
+				end
+
+
+			end
+
+
+
+			for i, v in Boxes do
+				v.Adornee = attacked[i] and attacked[i].RootPart or nil
+				if v.Adornee then
+					v.Color3 = Color3.fromHSV(BoxAttackColor.Hue, BoxAttackColor.Sat, BoxAttackColor.Value)
+					v.Transparency = 1 - BoxAttackColor.Opacity
+				end
+			end
+
+			for i, v in Particles do
+				v.Position = attacked[i] and attacked[i].RootPart.Position or Vector3.new(9e9, 9e9, 9e9)
+				v.Parent = attacked[i] and gameCamera or nil
+			end
+
+			task.wait(0.05)
+		until not Killaura.Enabled
+	else
+		for i, v in Boxes do
+			v.Adornee = nil
+		end
+		for i, v in Particles do
+			v.Parent = nil
+		end
+	end
+end,
     Tooltip = 'test module'
 })
-Targets = test:CreateTargets({
-	Players = true,
-    Function = function()
+Targets = Killaura:CreateTargets({Players = true})
+Swing = Killaura:CreateToggle({Name = 'No Swing'})
+Mouse = Killaura:CreateToggle({Name = 'Require mouse down'})
 
-    end,
-    Tooltip = 'Select targets to track.'
-})
-AttackRange = test:CreateSlider({
+AttackRange = Killaura:CreateSlider({
 	Name = 'Attack range',
 	Min = 1,
-	Max = 8,
-	Default = 8,
-	Suffix = function(val) 
-		return val == 1 and 'stud' or 'studs' 
+	Max = 18,
+	Default = 18,
+	Suffix = function(val)
+		return val == 1 and 'stud' or 'studs'
 	end
+})
+Max = Killaura:CreateSlider({
+	Name = 'Max targets',
+	Min = 1,
+	Max = 10,
+	Default = 10
 })
 Angle = test:CreateSlider({
 	Name = 'Max angle',
 	Min = 1,
 	Max = 360,
 	Default = 360
+})
+Killaura:CreateToggle({
+	Name = 'Show target',
+	Function = function(callback)
+		BoxAttackColor.Object.Visible = callback
+		if callback then
+			for i = 1, 10 do
+				local box = Instance.new('BoxHandleAdornment')
+				box.Adornee = nil
+				box.AlwaysOnTop = true
+				box.Size = Vector3.new(3, 5, 3)
+				box.CFrame = CFrame.new(0, -0.5, 0)
+				box.ZIndex = 0
+				box.Parent = vape.gui
+				Boxes[i] = box
+			end
+		else
+			for i, v in Boxes do
+				v:Destroy()
+			end
+			table.clear(Boxes)
+		end
+	end
 })

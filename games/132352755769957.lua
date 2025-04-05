@@ -80,6 +80,7 @@ local function startHitmanTargetSkipper(config)
             -- First check if target exists and has a player
             if not target or not target.player then
                 vape:CreateNotification('Vape',"⚠️ No target available, waiting...",1, 'alert')
+				print("No target available, waiting...")
                 HitmanShared.removeTarget()
                 HitmanShared.findNewTarget()
                 continue
@@ -89,11 +90,13 @@ local function startHitmanTargetSkipper(config)
             local skip, reason = shouldSkipTarget(target)
             if skip then
                 vape:CreateNotification('Vape','⏩ Skipping Target: ' .. reason,1, 'alert')
+				print("Skipping Target: " .. reason)
                 
                 HitmanShared.removeTarget()
                 HitmanShared.findNewTarget()
             else
-				vape:CreateNotification('Vape','✅ Accepted Target: ' .. target.player.Name .. " (Lv. " .. target.level .. ")",5, 'alert')
+				vape:CreateNotification('Vape','✅ Accepted Target: ' .. target.player.Name .. " (Lv. " .. target.level .. ")",5, 'alert')+
+				print("Accepted Target: " .. target.player.Name .. " (Lv. " .. target.level .. ")")
 				HitmanModule:Toggle()
 					LocalPlayer.Character.HumanoidRootPart.CFrame = originalPosition
 				break

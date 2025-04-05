@@ -117,7 +117,8 @@ Hitmantextbox = HitmanModule:CreateTextBox({
     Function = function(enter)
 		HitmanTargetPlayer = Hitmantextbox.Value
 		vape:CreateNotification('Vape',tostring(HitmanTargetPlayer), 5)
+
     end,
-    Placeholder = 'anim (num only)',
-    Tooltip = 'This is a test textbox.'
+    Placeholder = 'Enter player name',
+    Tooltip = 'Enter the player name you want to target',
 })

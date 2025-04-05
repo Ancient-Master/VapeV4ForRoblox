@@ -270,7 +270,7 @@ if callback then
             end
         end
     end
-
+end
     end,
     Tooltip = 'Heals yourself or players around you.'
 })

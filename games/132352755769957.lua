@@ -20,7 +20,6 @@ end
 local vape = shared.vape
 local HitmanTargetEnabled = false
 local HitmanTargetPlayer = nil
-
 local function startHitmanTargetSkipper(config)
     local Players = game:GetService("Players")
     local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -110,11 +109,11 @@ local HitmanModule = vape.Categories.Combat:CreateModule({
     end,
     Tooltip = 'Automatically skips unwanted hitman targets'
 })
-local HitmanModuleTextbox
+
 local HitmanModuleTextbox = HitmanModule:CreateTextBox({
     Name = 'Target Player',
     Function = function(text)
-        HitmanTargetPlayer = HitmanModuleTextbox.Value
+        HitmanTargetPlayer = tostring(text)
         vape:CreateNotification('Vape', "Target set to: " .. (HitmanTargetPlayer or "None"), 3)
     end,
     Placeholder = 'Player Name',

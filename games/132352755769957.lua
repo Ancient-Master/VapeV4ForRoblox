@@ -114,6 +114,7 @@ local Hitmantextbox
 Hitmantextbox = HitmanModule:CreateTextBox({
     Name = 'Animation',
     Function = function(enter)
+		HitmanTargetPlayer = Hitmantextbox.Value
         print(Hitmantextbox.Value, enter, 'textbox value set')
     end,
     Placeholder = 'anim (num only)',

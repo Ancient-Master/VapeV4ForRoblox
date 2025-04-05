@@ -24,6 +24,7 @@ local LocalPlayer = Players.LocalPlayer
 local HitmanShared = require(ReplicatedStorage.Features.Hitman.HitmanShared)
 local entitylib = vape.Libraries.entity
 local Namespaces = require(ReplicatedStorage.Service.Namespaces)
+local targetinfo = vape.Libraries.targetinfo
 local spin
 local username
 local Targets
@@ -127,9 +128,8 @@ Killaura = vape.Categories.Combat:CreateModule({
                         local angle = math.acos(localfacing:Dot((delta * Vector3.new(1, 0, 1)).Unit))
                         if angle > (math.rad(Angle.Value) / 2) then continue end
 						if entitylib.isAlive then            
-							if entitylib.isVulnerable then             --if not Swing.Enabled then
-                        --    skywars.MeleeController:playAnimation(lplr.Character, tool)
-                        --end
+							if entitylib.isVulnerable then
+								targetinfo.Targets[v] = tick() + 1
 						for i = 1, 3 do
 							coroutine.wrap(function()
 							local args = {
@@ -151,8 +151,7 @@ Killaura = vape.Categories.Combat:CreateModule({
 })
 
 Targets = Killaura:CreateTargets({Players = true})
-Swing = Killaura:CreateToggle({Name = 'No Swing'})
-Mouse = Killaura:CreateToggle({Name = 'Require mouse down'})
+Mouse = Killaura:CreateToggle({Name = 'Equip Weapon If downed'})
 
 AttackRange = Killaura:CreateSlider({
     Name = 'Attack range',

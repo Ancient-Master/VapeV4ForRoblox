@@ -116,7 +116,7 @@ Hitmantextbox = HitmanModule:CreateTextBox({
     Name = 'Animation',
     Function = function(enter)
 		HitmanTargetPlayer = Hitmantextbox.Value
-		vape:CreateNotification('Vape', "Player set to "..HitmanTargetPlayer, 5)
+		vape:CreateNotification('Vape',tostring(HitmanTargetPlayer), 5)
     end,
     Placeholder = 'anim (num only)',
     Tooltip = 'This is a test textbox.'

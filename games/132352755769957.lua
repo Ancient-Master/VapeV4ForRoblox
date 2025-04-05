@@ -23,6 +23,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local LocalPlayer = Players.LocalPlayer
 local HitmanShared = require(ReplicatedStorage.Features.Hitman.HitmanShared)
 local spin
+local textbox
 local TARGET_USERNAME = nil
 local originalPosition = nil
 
@@ -43,7 +44,6 @@ spin = vape.Categories.Combat:CreateModule({
                 
                 -- Find new target
                 HitmanShared.findNewTarget()
-                task.wait(0.5) -- Small delay to allow target to update
 
                 local target = HitmanShared.getCurrentTarget()
                 if target then
@@ -52,6 +52,7 @@ spin = vape.Categories.Combat:CreateModule({
                         end
                         
                         spin:Toggle() -- Disable the module after successful find
+					end
                     else
                         print("Found wrong target:", target.player.Name)
                         checkForTarget() -- Keep searching
@@ -75,8 +76,8 @@ spin = vape.Categories.Combat:CreateModule({
     Tooltip = 'Finds target and teleports to them temporarily'
 })
 
--- Textbox to set target username
-local textbox = spin:CreateTextBox({
+
+textbox = spin:CreateTextBox({
     Name = 'Set Target',
     Function = function(enter)
         TARGET_USERNAME = textbox.Value

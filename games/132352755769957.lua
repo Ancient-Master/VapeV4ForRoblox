@@ -57,9 +57,8 @@ local function checkForTarget()
     local target = HitmanShared.getCurrentTarget()
     if target then
         if string.lower(target.player.Name) == string.lower(TARGET_USERNAME) then
-            notif('Vape', "Successfully found target: " .. target.player.Name, 5)
+            notif('Vape', "Successfully found target: " .. target.player.Name, 5,'warning')
             spin:Toggle()
-            if 
         else
             notif('Vape', "Found wrong target: " .. target.player.Name, 3, 'warning')
             checkForTarget()
@@ -107,7 +106,6 @@ notp = spin:CreateToggle({
     end,
     Tooltip = 'Disables teleporting you have to stay near the bounty npc.'
 })
-
 Killaura = vape.Categories.Combat:CreateModule({
     Name = 'Killaura',
     Function = function(callback)

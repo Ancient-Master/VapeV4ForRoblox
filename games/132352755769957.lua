@@ -24,6 +24,7 @@ local function startHitmanTargetSkipper(config)
     local Players = game:GetService("Players")
     local ReplicatedStorage = game:GetService("ReplicatedStorage")
     local LocalPlayer = Players.LocalPlayer
+	local pos = LocalPlayer.Character.CFrame and LocalPlayer.Character:FindFirstChild("HumanoidRootPart").CFrame or LocalPlayer.CharacterAdded:Wait():WaitForChild("HumanoidRootPart").CFrame
     
     -- Default settings
     local TARGET_FILTER = {
@@ -67,6 +68,7 @@ local function startHitmanTargetSkipper(config)
 
     -- Main Loop
     task.spawn(function()
+		LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(127, 255, -748)
         while HitmanTargetEnabled do
             -- Wait for a new target
             local target = getCurrentTarget()
@@ -87,8 +89,8 @@ local function startHitmanTargetSkipper(config)
                 HitmanShared.removeTarget()
                 HitmanShared.findNewTarget()
             else
-                -- Safe to access player.Name since we checked above
-                vape:CreateNotification('Vape','✅ Accepted Target: ' .. target.player.Name .. " (Lv. " .. target.level .. ")",5, 'alert')
+				vape:CreateNotification('Vape','✅ Accepted Target: ' .. target.player.Name .. " (Lv. " .. target.level .. ")",5, 'alert')
+				LocalPlayer.Character.HumanoidRootPart.CFrame = pos
                 break
             end
         end
@@ -103,7 +105,6 @@ local HitmanModule = vape.Categories.Combat:CreateModule({
                 SkipIfLevelBelow = 0,
                 DesiredPlayer = HitmanTargetPlayer
             })
-			HitmanModule:Toggle()
         else
             vape:CreateNotification('Vape', "Hitman Target Skipper disabled", 5)
         end
@@ -113,7 +114,7 @@ local HitmanModule = vape.Categories.Combat:CreateModule({
 
 local Hitmantextbox
 Hitmantextbox = HitmanModule:CreateTextBox({
-    Name = 'Animation',
+    Name = 'Target Player',
     Function = function(enter)
 		HitmanTargetPlayer = Hitmantextbox.Value
 		vape:CreateNotification('Vape',tostring(HitmanTargetPlayer), 5)

@@ -97,6 +97,7 @@ spin = vape.Categories.Combat:CreateModule({
                         }
                         Namespaces.MeleeReplication.packets.sendHit.send(args)
                     end
+                    wait()
                 until not target or not target.player or not target.player.Character or 
                       target.player.Character.Humanoid.Health <= 0 or 
                       not killa.Enabled or 

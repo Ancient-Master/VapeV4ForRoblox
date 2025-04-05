@@ -110,12 +110,12 @@ local HitmanModule = vape.Categories.Combat:CreateModule({
     Tooltip = 'Automatically skips unwanted hitman targets'
 })
 
-local HitmanModuleTextbox = HitmanModule:CreateTextBox({
-    Name = 'Target Player',
-    Function = function(text)
-        HitmanTargetPlayer = textbox.Value
-        vape:CreateNotification('Vape', "Target set to: " .. (HitmanTargetPlayer or "None"), 3)
+local textbox
+textbox = HitmanModule:CreateTextBox({
+    Name = 'Animation',
+    Function = function(enter)
+        print(textbox.Value, enter, 'textbox value set')
     end,
-    Placeholder = 'Player Name',
-    Tooltip = 'Enter the name of the player you want as your target.'
+    Placeholder = 'anim (num only)',
+    Tooltip = 'This is a test textbox.'
 })

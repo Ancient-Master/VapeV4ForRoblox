@@ -79,7 +79,7 @@ local function checkForTarget()
         end
             spin:Toggle()
     end
-            end
+
         else
             notif('Vape', "Found wrong target: " .. target.player.Name, 3, 'warning')
             checkForTarget()

@@ -116,7 +116,7 @@ local function startHitmanTargetSkipper(config)
 	SilentAim = vape.Categories.Combat:CreateModule({
 		Name = 'SilentAim',
 		Function = function(callback)
-			vape:CreateNotification('Vape', 'Failed to load : '..err, 30, 'alert')
+			vape:CreateNotification('Vape',"affe", 30, 'alert')
 		end,
 		ExtraText = function() return 'Test' end,
 		Tooltip = 'This is a test module.'

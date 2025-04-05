@@ -107,7 +107,6 @@ Killaura = vape.Categories.Combat:CreateModule({
                     Wallcheck = Targets.Walls.Enabled or nil,
                     Part = 'RootPart',
                     Players = Targets.Players.Enabled,
-                    Limit = Max.Value
                 })
 
                 if #plrs > 0 then
@@ -152,13 +151,6 @@ AttackRange = Killaura:CreateSlider({
     Suffix = function(val)
         return val == 1 and 'stud' or 'studs'
     end
-})
-
-Max = Killaura:CreateSlider({
-    Name = 'Max targets',
-    Min = 1,
-    Max = 10,
-    Default = 10
 })
 
 Angle = Killaura:CreateSlider({

@@ -111,8 +111,8 @@ local function startHitmanTargetSkipper(config)
 
 
 
-	 local AutoTarget = vape.Categories.Combat:CreateModule({
-		Name = 'AutoTarget',
+	 local affe = vape.Categories.Combat:CreateModule({
+		Name = 'affe',
 		Function = function(callback)
 			startHitmanTargetSkipper({
 				SkipIfLevelBelow = 0,

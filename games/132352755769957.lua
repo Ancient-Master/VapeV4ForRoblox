@@ -18,15 +18,15 @@ local function downloadFile(path, func)
 end
 
 local vape = shared.vape
+local targetinfo = vape.Libraries.targetinfo
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local LocalPlayer = Players.LocalPlayer
 local HitmanShared = require(ReplicatedStorage.Features.Hitman.HitmanShared)
 local entitylib = vape.Libraries.entity
 local Namespaces = require(ReplicatedStorage.Service.Namespaces)
-local targetinfo = vape.Libraries.targetinfo
 local spin
-local username
+local username123
 local Targets
 local notp
 local TARGET_USERNAME
@@ -43,13 +43,13 @@ local function checkForTarget()
 	HitmanShared.removeTarget()
 	HitmanShared.findNewTarget()
 
-	local a = HitmanShared.getCurrentTarget()
-	if a then
-		if string.lower(a.player.Name) == string.lower(TARGET_USERNAME) then
-			vape:CreateNotification('Vape',"Successfully found target:", a.player.Name,5)
+	local target = HitmanShared.getCurrentTarget()
+	if target then
+		if string.lower(target.player.Name) == string.lower(TARGET_USERNAME) then
+			vape:CreateNotification('Vape',"Successfully found target:", target.player.Name,5)
 			spin:Toggle()
 		else
-			vape:CreateNotification('Vape',"Found wrong target:", a.player.Name,1,'warning')
+			vape:CreateNotification('Vape',"Found wrong target:", target.player.Name,1,'warning')
 
 			checkForTarget()
 		end
@@ -82,10 +82,10 @@ spin = vape.Categories.Combat:CreateModule({
     Tooltip = 'Automatically finds and locks onto specified target.'
 })
 
-username = spin:CreateTextBox({
+username123 = spin:CreateTextBox({
     Name = 'Set Target',
     Function = function(enter)
-		TARGET_USERNAME = username.Value
+		TARGET_USERNAME = username123.Value
     end,
     Placeholder = 'Enter target username',
     Tooltip = 'Enter the username of the target you want to find.'

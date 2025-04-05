@@ -29,9 +29,7 @@ local function startHitmanTargetSkipper(config)
     local Players = game:GetService("Players")
     local ReplicatedStorage = game:GetService("ReplicatedStorage")
     local LocalPlayer = Players.LocalPlayer
-	if not originalPosition and LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-        originalPosition = LocalPlayer.Character.HumanoidRootPart.CFrame
-    end
+
     -- Default settings
     local TARGET_FILTER = {
         SkipIfLevelBelow = config.SkipIfLevelBelow or 0,
@@ -97,10 +95,7 @@ local function startHitmanTargetSkipper(config)
             else
 				vape:CreateNotification('Vape','✅ Accepted Target: ' .. target.player.Name .. " (Lv. " .. target.level .. ")",5, 'alert')
 				HitmanModule:Toggle()
-				if originalPosition then
 					LocalPlayer.Character.HumanoidRootPart.CFrame = originalPosition
-					originalPosition = nil
-				end
 				break
             end
         end
@@ -111,15 +106,13 @@ HitmanModule = vape.Categories.Combat:CreateModule({
     Function = function(callback)
         HitmanTargetEnabled = callback
         if callback then
+			originalPosition = LocalPlayer.Character:FindFirstChild("HumanoidRootPart").CFrame
             startHitmanTargetSkipper({
                 SkipIfLevelBelow = 0,
                 DesiredPlayer = HitmanTargetPlayer
             })
         else
-			if originalPosition then
-				LocalPlayer.Character.HumanoidRootPart.CFrame = originalPosition
-			end
-			originalPosition = nil
+			LocalPlayer.Character:FindFirstChild("HumanoidRootPart").CFrame = originalPosition
             vape:CreateNotification('Vape', "Hitman Target Finder disabled", 5)
         end
     end,

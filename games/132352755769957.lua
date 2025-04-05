@@ -82,7 +82,6 @@ local function startHitmanTargetSkipper(config)
             if not target or not target.player then
                 vape:CreateNotification('Vape', "⚠️ No target available, waiting...", 1, 'alert')
                 HitmanShared.findNewTarget()
-                task.wait(1) -- Add delay to prevent spamming
                 continue
             end
 
@@ -91,7 +90,6 @@ local function startHitmanTargetSkipper(config)
                 vape:CreateNotification('Vape', '⏩ Skipping Target: ' .. reason, 1, 'alert')
                 HitmanShared.removeTarget()
                 HitmanShared.findNewTarget()
-                task.wait(1) -- Add delay between skips
             else
                 vape:CreateNotification('Vape', '✅ Accepted Target: ' .. target.player.Name .. " (Lv. " .. target.level .. ")", 5, 'alert')
                 HitmanModule:Toggle()

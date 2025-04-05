@@ -6186,23 +6186,29 @@ run(function()
 	})
 end)
 run(function()
+    local platformPart = nil -- Store the platform reference
+
     local Platform = vape.Categories.Utility:CreateModule({
         Name = 'Platform in the Sky',
         Function = function(callback)
             if callback then
-                local platform2 = Instance.new('Part')
-                platform2.Size = Vector3.new(100, 1, 100)
-                platform2.Position = Vector3.new(0, 1000, 0)
-                platform2.Anchored = true
-                platform2.Parent = workspace
-                platform2.Material = Enum.Material.SmoothPlastic
-                platform2.Color = Color3.fromRGB(255, 255, 255)
-                platform2.CanCollide = true
+                -- Create the platform if it doesn't exist
+                if not platformPart or not platformPart.Parent then
+                    platformPart = Instance.new('Part')
+                    platformPart.Size = Vector3.new(100, 1, 100)
+                    platformPart.Position = Vector3.new(0, slider.Value, 0)
+                    platformPart.Anchored = true
+                    platformPart.Parent = workspace
+                    platformPart.Material = Enum.Material.SmoothPlastic
+                    platformPart.Color = Color3.fromRGB(255, 255, 255)
+                    platformPart.CanCollide = true
+                    platformPart.Name = "VapeSkyPlatform" -- Helps identify it
+                end
             else
-                for _, v in workspace:GetChildren() do
-                    if v:IsA('Part') and v.Size == Vector3.new(100, 1, 100) and v.Position == Vector3.new(0, slider.Value, 0) then
-                        v:Destroy()
-                    end
+                -- Delete the platform if it exists
+                if platformPart and platformPart.Parent then
+                    platformPart:Destroy()
+                    platformPart = nil
                 end
             end
         end,
@@ -6215,10 +6221,8 @@ run(function()
         Max = 1000,
         Default = 1000,
         Function = function(val)
-            for _, v in workspace:GetChildren() do
-                if v:IsA('Part') and v.Size == Vector3.new(100, 1, 100) then
-                    v.Position = Vector3.new(0, val, 0)
-                end
+            if platformPart and platformPart.Parent then
+                platformPart.Position = Vector3.new(0, val, 0)
             end
         end,
         Decimal = 10
@@ -6226,14 +6230,12 @@ run(function()
     
     local slider2 = Platform:CreateSlider({
         Name = 'Platform Size',
-        Min = 0,
+        Min = 1, -- Minimum size 1 to prevent errors
         Max = 1000,
         Default = 100,
         Function = function(val)
-            for _, v in workspace:GetChildren() do
-                if v:IsA('Part') and v.Size == Vector3.new(100, 1, 100) then
-                    v.Size = Vector3.new(val, 1, val)
-                end
+            if platformPart and platformPart.Parent then
+                platformPart.Size = Vector3.new(val, 1, val)
             end
         end,
         Decimal = 10
@@ -6242,9 +6244,8 @@ run(function()
     local teleport = Platform:CreateButton({
         Name = 'Teleport to Platform',
         Function = function()
-            if entitylib.isAlive then
-                -- Teleport to 10 studs above the platform
-                entitylib.character.RootPart.CFrame = CFrame.new(0, slider.Value + 10, 0) 
+            if entitylib.isAlive and platformPart and platformPart.Parent then
+                entitylib.character.RootPart.CFrame = CFrame.new(0, slider.Value + 10, 0)
             end
         end
     })

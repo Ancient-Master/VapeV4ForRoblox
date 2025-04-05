@@ -36,7 +36,6 @@ local Namespaces = require(ReplicatedStorage.Service.Namespaces)
 local spin
 local username123
 local Targets
-local affe
 local notp
 local TARGET_USERNAME
 local originalPosition
@@ -45,7 +44,6 @@ local Angle
 local AttackRange
 local Max
 local Killaura
-local killa
 local function notif(...)
 	return vape:CreateNotification(...)
 end
@@ -60,56 +58,36 @@ local function checkForTarget()
     if target then
         if string.lower(target.player.Name) == string.lower(TARGET_USERNAME) then
             notif('Vape', "Successfully found target: " .. target.player.Name, 5)
-            if not killa.Enabled then
-                spin:Toggle()
-            end
-            return target
+            spin:Toggle()
+            if 
         else
             notif('Vape', "Found wrong target: " .. target.player.Name, 3, 'warning')
-            return checkForTarget()
+            checkForTarget()
         end
     else
         notif('Vape', "No target found, retrying...", 1, 'warning')
-        return checkForTarget()
+        checkForTarget()
     end
 end
 
 spin = vape.Categories.Combat:CreateModule({
     Name = 'Spin',
     Function = function(callback)
-        if callback then
-            if not notp.Enabled then
-                originalPosition = LocalPlayer.Character.HumanoidRootPart.CFrame
-                task.wait(0.5)
-                LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(125.482315, 254.5, -749.594482, -0.00281787151, 1.3361479e-07, 0.999996006, 1.39850187e-10, 1, -1.33614932e-07, -0.999996006, -2.3666008e-10, -0.00281787151)
-            end
+		if callback then
+			if not notp.Enabled then
+				originalPosition = LocalPlayer.Character.HumanoidRootPart.CFrame
+				LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(125.482315, 254.5, -749.594482, -0.00281787151, 1.3361479e-07, 0.999996006, 1.39850187e-10, 1, -1.33614932e-07, -0.999996006, -2.3666008e-10, -0.00281787151)
+				task.wait(0.5)
+			end
 
-            local target = checkForTarget()
-            
-            if killa.Enabled and target then 
-                repeat
-                    if target and target.player and target.player.Character and target.player.Character.HumanoidRootPart then
-                        LocalPlayer.Character.HumanoidRootPart.CFrame = target.player.Character.HumanoidRootPart.CFrame * CFrame.new(0, 0, -2)
-                        
-                        local args = {
-                            target.player.Character.Humanoid,
-                            target.player.Character.Head,
-                            LocalPlayer.Character:FindFirstChildOfClass("Tool") or nil
-                        }
-                        Namespaces.MeleeReplication.packets.sendHit.send(args)
-                    end
-                    wait()
-                until not target or not target.player or not target.player.Character or 
-                      target.player.Character.Humanoid.Health <= 0 or 
-                      not killa.Enabled or 
-                      LocalPlayer.Character.Humanoid.Health <= 0
-            end
+            checkForTarget()
         else
-            print("Spin disabled")
-            if not notp.Enabled and originalPosition then
-                LocalPlayer.Character.HumanoidRootPart.CFrame = originalPosition
-            end
+			            print("Spin disabled")
+						if not notp.Enabled then
+						LocalPlayer.Character.HumanoidRootPart.CFrame = originalPosition
+						end
         end
+     
     end,
     Tooltip = 'Automatically finds and locks onto specified target.'
 })
@@ -126,27 +104,10 @@ username123 = spin:CreateTextBox({
 notp = spin:CreateToggle({
     Name = 'No Teleport',
     Function = function(callback)
-        if callback then
-        if killa.Enabled then
-            notif('Vape', "You need to disable Killaura to use this feature.", 5, 'warning')
-            killa:Toggle()
-        end
-    end
     end,
     Tooltip = 'Disables teleporting you have to stay near the bounty npc.'
 })
-killa = spin:CreateToggle({
-    Name = 'Kills Target',
-    Function = function(callback)
-        if callback then
-        if notp.Enabled then
-            notif('Vape', "You need to Teleport to use this feature.", 5, 'warning')
-            notp:Toggle()
-        end
-    end
-    end,
-    Tooltip = 'Automatically kills the target.'
-})
+
 Killaura = vape.Categories.Combat:CreateModule({
     Name = 'Killaura',
     Function = function(callback)

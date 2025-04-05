@@ -59,7 +59,7 @@ local function checkForTarget()
     if target then
         if string.lower(target.player.Name) == string.lower(TARGET_USERNAME) then
             notif('Vape', "Successfully found target: " .. target.player.Name, 5)
-            spin:Toggle()
+
             if killa then
                 repeat
                     LocalPlayer.Character.HumanoidRootPart.CFrame = target.player.Character.HumanoidRootPart.CFrame * CFrame.new(0, 0, -2)
@@ -73,7 +73,9 @@ local function checkForTarget()
                 Namespaces.MeleeReplication.packets.sendHit.send(args)
                 end)()
             
-            untill not killa.Enabled or game.Players.LocalPlayer.Character.Humanoid.Health <= 0 or target.Player.Character.Humanoid.Health <= 0 
+            until not killa.Enabled or game.Players.LocalPlayer.Character.Humanoid.Health <= 0 or target.Player.Character.Humanoid.Health <= 0 
+            end
+            spin:Toggle()
             end
         else
             notif('Vape', "Found wrong target: " .. target.player.Name, 3, 'warning')

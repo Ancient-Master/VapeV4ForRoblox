@@ -236,6 +236,7 @@ HealAura = vape.Categories.Blatant:CreateModule({
     Name = 'HealAura',
     Function = function(callback)
 if callback then
+    while HealAura.Enabled do
             if Backpack then
                 for _, tool in ipairs(Backpack:GetChildren()) do
                     if table.find(VALID_TOOLS, tool.Name) and tool:GetAttribute("Ready") then
@@ -257,7 +258,7 @@ if callback then
         
         -- Main control system
 
-        while HealAura.Enabled do
+
             local target = findValidTarget()
             if target then
                 if equipAvailableTool() then

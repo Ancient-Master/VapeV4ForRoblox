@@ -101,7 +101,7 @@ local function equipAvailableTool()
             end
         end
     end
-
+end
         -- Target finding with validation
         local function findValidTarget()
             if not HealOthers.Enabled then return nil end

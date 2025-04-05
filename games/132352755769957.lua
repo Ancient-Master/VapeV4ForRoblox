@@ -144,6 +144,7 @@ Killaura = vape.Categories.Combat:CreateModule({
 				end
                 end
                 end
+			end
                 task.wait()
             until not Killaura.Enabled
         end

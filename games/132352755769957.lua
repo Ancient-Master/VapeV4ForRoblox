@@ -110,11 +110,11 @@ local HitmanModule = vape.Categories.Combat:CreateModule({
     Tooltip = 'Automatically skips unwanted hitman targets'
 })
 
-local textbox
-textbox = HitmanModule:CreateTextBox({
+local Hitmantextbox
+Hitmantextbox = HitmanModule:CreateTextBox({
     Name = 'Animation',
     Function = function(enter)
-        print(textbox.Value, enter, 'textbox value set')
+        print(Hitmantextbox.Value, enter, 'textbox value set')
     end,
     Placeholder = 'anim (num only)',
     Tooltip = 'This is a test textbox.'

@@ -129,7 +129,7 @@ Killaura = vape.Categories.Combat:CreateModule({
                         if angle > (math.rad(Angle.Value) / 2) then continue end
 						if entitylib.isAlive then            
 							if entitylib.isVulnerable then
-								targetinfo.Targets[v] = tick() + 1
+							targetinfo.Targets[v] = tick() + 1
 						for i = 1, 3 do
 							coroutine.wrap(function()
 							local args = {
@@ -140,6 +140,7 @@ Killaura = vape.Categories.Combat:CreateModule({
                         Namespaces.MeleeReplication.packets.sendHit.send(args)
 						end)()
 					end
+				end
 				end
 			end
 

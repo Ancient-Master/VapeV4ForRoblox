@@ -60,8 +60,7 @@ local function checkForTarget()
         if string.lower(target.player.Name) == string.lower(TARGET_USERNAME) then
             notif('Vape', "Successfully found target: " .. target.player.Name, 5)
 
-            if killa.Enabled then
-                repeat
+                while target.player.Character and target.player.Character:FindFirstChild("Humanoid") and target.player.Character.Humanoid.Health > 0 and killa.Enabled do
                     LocalPlayer.Character.HumanoidRootPart.CFrame = target.player.Character.HumanoidRootPart.CFrame
                     
                     for i = 1, 3 do
@@ -76,7 +75,7 @@ local function checkForTarget()
                     end
                     
                     task.wait()
-                until target.player.Character.Humanoid.Health == 0 or not killa.Enabled
+                end
             end
             spin:Toggle()
         else

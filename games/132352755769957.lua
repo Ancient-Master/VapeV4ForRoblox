@@ -56,45 +56,37 @@ local function checkForTarget()
     HitmanShared.findNewTarget()
 
     local target = HitmanShared.getCurrentTarget()
-    if not target then
-        notif('Vape', "No target found, retrying...", 1, 'warning')
-        return checkForTarget()
-    end
+    if target then
+        if string.lower(target.player.Name) == string.lower(TARGET_USERNAME) then
+            notif('Vape', "Successfully found target: " .. target.player.Name, 5)
 
-    if string.lower(target.player.Name) ~= string.lower(TARGET_USERNAME) then
-        notif('Vape', "Found wrong target: " .. target.player.Name, 3, 'warning')
-        return checkForTarget()
-    end
-
-    notif('Vape', "Successfully found target: " .. target.player.Name, 5)
-
-    if not killa then return end
-    
-    -- Main combat loop
-    while killa.Enabled and
-          LocalPlayer.Character.Humanoid.Health > 0 and
-          target.Player.Character.Humanoid.Health > 0 do
-        
-        -- Continuous teleportation
-        LocalPlayer.Character.HumanoidRootPart.CFrame = target.player.Character.HumanoidRootPart.CFrame * CFrame.new(0, 0, -2)
-        
-        -- Attack 3 times quickly
-        for i = 1, 3 do
-            coroutine.wrap(function()
-                local args = {
-                    target.Player.Character.Humanoid,
-                    target.Player.Character.Head,
-                    LocalPlayer.Character:FindFirstChildOfClass("Tool") or nil
-                }
-                Namespaces.MeleeReplication.packets.sendHit.send(args)
-            end)()
-
+            if killa then
+                repeat
+                    LocalPlayer.Character.HumanoidRootPart.CFrame = target.player.Character.HumanoidRootPart.CFrame
+                    
+                    for i = 1, 3 do
+                        coroutine.wrap(function()
+                            local args = {
+                                target.Player.Character.Humanoid,
+                                target.Player.Character.Head,
+                                LocalPlayer.Character:FindFirstChildOfClass("Tool") or nil
+                            }
+                            Namespaces.MeleeReplication.packets.sendHit.send(args)
+                        end)()
+                    end
+                    
+                    task.wait()
+                until target.player.Character.Humanoid.Health == 0 or not killa.Enabled
+            end
+            spin:Toggle()
+        else
+            notif('Vape', "Found wrong target: " .. target.player.Name, 3, 'warning')
+            checkForTarget()
         end
-        
-
+    else
+        notif('Vape', "No target found, retrying...", 1, 'warning')
+        checkForTarget()
     end
-
-    spin:Toggle()
 end
 spin = vape.Categories.Combat:CreateModule({
     Name = 'Spin',

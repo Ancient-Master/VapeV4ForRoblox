@@ -6203,7 +6203,7 @@ run(function()
                     platformPart.Anchored = true
                     platformPart.Parent = workspace
                     platformPart.Material = Enum.Material.SmoothPlastic
-                    platformPart.Color = colorSlider and colorSlider.Hue or Color3.fromRGB(255, 255, 255)
+                    platformPart.Color = colorSlider and colorSlider.Rainbow or Color3.fromRGB(255, 255, 255)
                     platformPart.CanCollide = true
                     platformPart.Name = "VapeSkyPlatform"
                     

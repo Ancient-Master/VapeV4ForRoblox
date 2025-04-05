@@ -3,12 +3,10 @@ local loadstring = function(...)
     if err and vape then vape:CreateNotification('Vape', 'Failed to load : '..err, 30, 'alert') end
     return res
 end
-
 local isfile = isfile or function(file)
     local suc, res = pcall(function() return readfile(file) end)
     return suc and res ~= nil and res ~= ''
 end
-
 local function downloadFile(path, func)
     if not isfile(path) then
         local suc, res = pcall(function() return game:HttpGet('https://raw.githubusercontent.com/Ancient-Master/VapeV4ForRoblox/'..readfile('newvape/profiles/commit.txt')..'/'..select(1, path:gsub('newvape/', '')), true) end)
@@ -26,7 +24,7 @@ local LocalPlayer = Players.LocalPlayer
 local HitmanShared = require(ReplicatedStorage.Features.Hitman.HitmanShared)
 local spin
 local textbox
-local TARGET_USERNAME = nil
+local TARGET_USERNAME = "SwiftUser_com" -- Default target
 local originalPosition = nil
 
 spin = vape.Categories.Combat:CreateModule({
@@ -40,6 +38,7 @@ spin = vape.Categories.Combat:CreateModule({
             
             local function checkForTarget()
                 if not spin.Enabled then return end
+                
                 -- Remove current target
                 HitmanShared.removeTarget()
                 
@@ -50,6 +49,8 @@ spin = vape.Categories.Combat:CreateModule({
                 if target then
                     if string.lower(target.player.Name) == string.lower(TARGET_USERNAME) then
                         print("\n🎯 Successfully found target:", target.player.Name)
+                        end
+                        
                         spin:Toggle() -- Disable the module after successful find
                     else
                         print("Found wrong target:", target.player.Name)
@@ -65,15 +66,16 @@ spin = vape.Categories.Combat:CreateModule({
             checkForTarget()
         else
             print("Spin disabled")
-            if originalPosition and LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-                LocalPlayer.Character.HumanoidRootPart.CFrame = originalPosition
-            end
+			if originalPosition then
+				LocalPlayer.Character.HumanoidRootPart.CFrame = originalPosition
+			end
             -- Clean up when disabled if needed
         end
     end,
     Tooltip = 'Finds target and teleports to them temporarily'
 })
 
+-- Textbox to set target username
 textbox = spin:CreateTextBox({
     Name = 'Set Target',
     Function = function(enter)

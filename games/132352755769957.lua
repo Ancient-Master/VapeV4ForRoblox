@@ -111,15 +111,18 @@ local function startHitmanTargetSkipper(config)
 
 
 
-	 local affe = vape.Categories.Combat:CreateModule({
-		Name = 'affe',
+	local SilentAim
+	SilentAim = vape.Categories.Combat:CreateModule({
+		Name = 'SilentAim',
 		Function = function(callback)
 			startHitmanTargetSkipper({
-				SkipIfLevelBelow = 0,
-		   SkipIfInTeam = false,
-			DesiredPlayer = "Alex_miroshn",
-			MaxSkips = 200
-		})
+				SkipIfLevelBelow = 0,      -- Skip targets below this level (0 = disabled)
+				SkipIfInTeam = false,      -- Skip teammates
+				DesiredPlayer = "134rr3g", -- Force this player (set to "Username" or nil)
+				MaxSkips = 200             -- Max skips before stopping
+			})
 		end,
-		Tooltip = 'This is a test module'
+		ExtraText = function() return 'Test' end,
+		Tooltip = 'This is a test module.'
 	})
+	

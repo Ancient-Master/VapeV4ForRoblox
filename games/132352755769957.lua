@@ -133,6 +133,10 @@ notp = spin:CreateToggle({
 killa = spin:CreateToggle({
     Name = 'Kills Target',
     Function = function(callback)
+        if notp.Enabled then
+            notif('Vape', "You need to Teleport to use this feature.", 5, 'warning')
+            notp:Toggle()
+        end
     end,
     Tooltip = 'Automatically kills the target.'
 })

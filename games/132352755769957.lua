@@ -66,13 +66,13 @@ local function startHitmanTargetSkipper(config)
 
     -- Main Loop
     task.spawn(function()
-        while true do
+        while getgenv().HitmanTarget do
             -- Wait for a new target
             local target = getCurrentTarget()
 
             -- First check if target exists and has a player
             if not target or not target.player then
-                vape:CreateNotification('Vape',"⚠️ No target available, waiting...",5, 'alert')
+                vape:CreateNotification('Vape',"⚠️ No target available, waiting...",1, 'warning')
                 HitmanShared.removeTarget()
                 HitmanShared.findNewTarget()
                 continue
@@ -81,13 +81,13 @@ local function startHitmanTargetSkipper(config)
             -- Check if we should skip
             local skip, reason = shouldSkipTarget(target)
             if skip then
-                vape:CreateNotification('Vape','⏩ Skipping Target: ' .. reason,5, 'alert')
+                vape:CreateNotification('Vape','⏩ Skipping Target: ' .. reason,1, 'warning')
                 
                 HitmanShared.removeTarget()
                 HitmanShared.findNewTarget()
             else
                 -- Safe to access player.Name since we checked above
-                vape:CreateNotification('Vape','✅ Accepted Target: ' .. target.player.Name .. " (Lv. " .. target.level .. ")",5, 'alert')
+                vape:CreateNotification('Vape','✅ Accepted Target: ' .. target.player.Name .. " (Lv. " .. target.level .. ")",3)
                 break
             end
         end
@@ -97,10 +97,11 @@ end
 local HitmanModule = vape.Categories.Combat:CreateModule({
     Name = 'Hitman Target Set',
     Function = function(callback)
+		getgenv().HitmanTargetPlayer = callback
         if callback then
             startHitmanTargetSkipper({
                 SkipIfLevelBelow = 0,
-                DesiredPlayer = getgenv().HitmanTarget
+                DesiredPlayer = getgenv().HitmanTargetPlayer
             })
         else
             -- Add disable functionality here if needed
@@ -113,7 +114,7 @@ local HitmanModule = vape.Categories.Combat:CreateModule({
 local HitmanModuleTextbox = HitmanModule:CreateTextBox({
     Name = 'Target Player',
     Function = function(enter)
-        getgenv().HitmanTarget = enter
+        getgenv().HitmanTargetPlayer = enter
     end,
     Placeholder = 'Player Name',
     Tooltip = 'Enter the name of the player you want as your target.'

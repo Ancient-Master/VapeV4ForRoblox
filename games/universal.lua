@@ -6198,12 +6198,12 @@ run(function()
                 -- Create the platform if it doesn't exist
                 if not platformPart or not platformPart.Parent then
                     platformPart = Instance.new('Part')
-                    platformPart.Size = Vector3.new(100, 1, 100)
+                    platformPart.Size = Vector3.new(slider2.Value, 1, slider2.Value)
                     platformPart.Position = Vector3.new(0, slider and slider.Value or 1000) -- Fallback to 1000 if slider not ready
                     platformPart.Anchored = true
                     platformPart.Parent = workspace
                     platformPart.Material = Enum.Material.SmoothPlastic
-                    platformPart.Color = colorSlider and colorSlider.Color or Color3.fromRGB(255, 255, 255)
+                    platformPart.Color = colorSlider and colorSlider.Value or Color3.fromRGB(255, 255, 255)
                     platformPart.CanCollide = true
                     platformPart.Name = "VapeSkyPlatform"
                     

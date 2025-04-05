@@ -6186,66 +6186,68 @@ run(function()
 	})
 end)
 run(function()
-	local Platform = vape.Categories.Utility:CreateModule({
-	Name = 'Platform in the Sky',
-	Function = function(callback)
-		if callback then
-			local platform2 = Instance.new('Part')
-			platform2.Size = Vector3.new(100, 1, 100)
-			platform2.Position = Vector3.new(0, 1000, 0)
-			platform2.Anchored = true
-			platform2.Parent = workspace
-			platform2.Material = Enum.Material.SmoothPlastic
-			platform2.Color = Color3.fromRGB(255, 255, 255)
-			platform2.CanCollide = true
-		else
-			for _, v in workspace:GetChildren() do
-				if v:IsA('Part') and v.Size == Vector3.new(100, 1, 100) and v.Position == Vector3.new(0, slider.Value, 0) then
-					v:Destroy()
-				end
-			end
-		end
-	end,
-	Tooltip = 'Uninjects the script to prevent bans'
-})
-local slider = Platform:CreateSlider({
-	Name = 'Platform Height',
-	Min = 0,
-	Max = 1000,
-	Default = 1000,
-	Function = function(val)
-		for _, v in workspace:GetChildren() do
-			if v:IsA('Part') and v.Size == Vector3.new(100, 1, 100) then
-				v.Position = Vector3.new(0, val, 0)
-			end
-		end
-	end,
-	Decimal = 10
-})
-local slider2 = Platform:CreateSlider({
-	Name = 'Platform Size',
-	Min = 0,
-	Max = 1000,
-	Default = 1000,
-	Function = function(val)
-		for _, v in workspace:GetChildren() do
-			if v:IsA('Part') and v.Size == Vector3.new(100, 1, 100) then
-				v.Size = Vector3.new(val, 1, val)
-			end
-		end
-	end,
+    local Platform = vape.Categories.Utility:CreateModule({
+        Name = 'Platform in the Sky',
+        Function = function(callback)
+            if callback then
+                local platform2 = Instance.new('Part')
+                platform2.Size = Vector3.new(100, 1, 100)
+                platform2.Position = Vector3.new(0, 1000, 0)
+                platform2.Anchored = true
+                platform2.Parent = workspace
+                platform2.Material = Enum.Material.SmoothPlastic
+                platform2.Color = Color3.fromRGB(255, 255, 255)
+                platform2.CanCollide = true
+            else
+                for _, v in workspace:GetChildren() do
+                    if v:IsA('Part') and v.Size == Vector3.new(100, 1, 100) and v.Position == Vector3.new(0, slider.Value, 0) then
+                        v:Destroy()
+                    end
+                end
+            end
+        end,
+        Tooltip = 'Creates a platform in the sky'
+    })
+    
+    local slider = Platform:CreateSlider({
+        Name = 'Platform Height',
+        Min = 0,
+        Max = 1000,
+        Default = 1000,
+        Function = function(val)
+            for _, v in workspace:GetChildren() do
+                if v:IsA('Part') and v.Size == Vector3.new(100, 1, 100) then
+                    v.Position = Vector3.new(0, val, 0)
+                end
+            end
+        end,
+        Decimal = 10
+    })
+    
+    local slider2 = Platform:CreateSlider({
+        Name = 'Platform Size',
+        Min = 0,
+        Max = 1000,
+        Default = 100,
+        Function = function(val)
+            for _, v in workspace:GetChildren() do
+                if v:IsA('Part') and v.Size == Vector3.new(100, 1, 100) then
+                    v.Size = Vector3.new(val, 1, val)
+                end
+            end
+        end,
+        Decimal = 10
+    })
 
-	Decimal = 10
-})
-
-local teleport = Platform:CreateButton({
-	Name = 'Teleport to Platform',
-	Function = function()
-		if entitylib.isAlive then
-			entitylib.character.RootPart.CFrame = CFrame.new(0, slider.Value, 0) * CFrame.New(0, 10, 0)
-		end
-	end
-})
+    local teleport = Platform:CreateButton({
+        Name = 'Teleport to Platform',
+        Function = function()
+            if entitylib.isAlive then
+                -- Teleport to 10 studs above the platform
+                entitylib.character.RootPart.CFrame = CFrame.new(0, slider.Value + 10, 0) 
+            end
+        end
+    })
 end)
 run(function()
 	vape.Categories.Utility:CreateModule({

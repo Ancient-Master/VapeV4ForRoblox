@@ -63,23 +63,19 @@ local function checkForTarget()
             if killa then
                 repeat
                     LocalPlayer.Character.HumanoidRootPart.CFrame = target.player.Character.HumanoidRootPart.CFrame * CFrame.new(0, 0, -2)
-                for i = 1, 3 do
-                    coroutine.wrap(function()
-                    local args = {
-                        target.Player.Character.Humanoid,
-                        target.Player.Character.Head,
-                    LocalPlayer.Character:FindFirstChildOfClass("Tool") or nil
-                }
-                Namespaces.MeleeReplication.packets.sendHit.send(args)
-                end)()
+                    for i = 1, 3 do
+                        coroutine.wrap(function()
+                            local args = {
+                                target.Player.Character.Humanoid,
+                                target.Player.Character.Head,
+                                LocalPlayer.Character:FindFirstChildOfClass("Tool") or nil
+                            }
+                            Namespaces.MeleeReplication.packets.sendHit.send(args)
+                        end)()
+                    end
+                until not killa.Enabled or game.Players.LocalPlayer.Character.Humanoid.Health <= 0 or target.Player.Character.Humanoid.Health <= 0 
             end
-            until not killa.Enabled or game.Players.LocalPlayer.Character.Humanoid.Health <= 0 or target.Player.Character.Humanoid.Health <= 0 
-            end
-        end
             spin:Toggle()
-    end
-    end
-
         else
             notif('Vape', "Found wrong target: " .. target.player.Name, 3, 'warning')
             checkForTarget()
@@ -89,7 +85,6 @@ local function checkForTarget()
         checkForTarget()
     end
 end
-
 spin = vape.Categories.Combat:CreateModule({
     Name = 'Spin',
     Function = function(callback)

@@ -127,20 +127,24 @@ username123 = spin:CreateTextBox({
 notp = spin:CreateToggle({
     Name = 'No Teleport',
     Function = function(callback)
+        if callback then
         if killa.Enabled then
             notif('Vape', "You need to disable Killaura to use this feature.", 5, 'warning')
             killa:Toggle()
         end
+    end
     end,
     Tooltip = 'Disables teleporting you have to stay near the bounty npc.'
 })
 killa = spin:CreateToggle({
     Name = 'Kills Target',
     Function = function(callback)
+        if callback then
         if notp.Enabled then
             notif('Vape', "You need to Teleport to use this feature.", 5, 'warning')
             notp:Toggle()
         end
+    end
     end,
     Tooltip = 'Automatically kills the target.'
 })

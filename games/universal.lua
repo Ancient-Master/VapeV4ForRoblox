@@ -6187,51 +6187,17 @@ run(function()
 end)
 
 run(function()
-local Platform
+    local Platform
     local platformPart = nil -- Store the platform reference
     local slider, slider2, fullbrightToggle
     local originalLighting = {
-        Ambient = nil,
-        Brightness = nil,
-        OutdoorAmbient = nil,
-        FullbrightEffect = nil
+        Ambient = game.Lighting.Ambient,
+        Brightness = game.Lighting.Brightness,
+        OutdoorAmbient = game.Lighting.OutdoorAmbient,
+        ColorShift_Top = game.Lighting.ColorShift_Top,
+        ColorShift_Bottom = game.Lighting.ColorShift_Bottom
     }
     local lightingService = game:GetService("Lighting")
-
-    Platform = vape.Categories.Utility:CreateModule({
-        Name = 'Platform in the Sky',
-        Function = function(callback)
-            if callback then
-                -- Create the platform if it doesn't exist
-                if not platformPart or not platformPart.Parent then
-                    platformPart = Instance.new('Part')
-                    platformPart.Size = Vector3.new(slider2 and slider2.Value or 100, 1, slider2 and slider2.Value or 100)
-                    platformPart.Position = Vector3.new(0, slider and slider.Value or 1000, 0)
-                    platformPart.Anchored = true
-                    platformPart.Parent = workspace
-                    platformPart.Material = Enum.Material.SmoothPlastic
-                    platformPart.CanCollide = true
-                    platformPart.Name = "VapeSkyPlatform"
-                    
-                    -- Apply fullbright if enabled
-                    if Platform.Enabled and fullbrightToggle.Enabled then
-                        applyFullBright()
-                    end
-                end
-            else
-                -- Delete the platform if it exists
-                if platformPart and platformPart.Parent then
-                    platformPart:Destroy()
-                    platformPart = nil
-                end
-                -- Restore original lighting when platform is disabled
-                if not Platform.Enabled or not fullbrightToggle.Enabled then
-                    restoreLighting()
-                end
-            end
-        end,
-        Tooltip = 'Creates a platform in the sky'
-    })
 
     -- Function to apply fullbright effect
     local function applyFullBright()
@@ -6241,19 +6207,25 @@ local Platform
             originalLighting.Brightness = lightingService.Brightness
             originalLighting.OutdoorAmbient = lightingService.OutdoorAmbient
             
-            -- Create fullbright effect
-            local newLight = Instance.new("ColorCorrectionEffect")
-            newLight.Name = "VapeFullbright"
-            newLight.Brightness = 1
-            newLight.Contrast = 1
-            newLight.Saturation = 0
-            newLight.TintColor = Color3.new(1, 1, 1)
-            newLight.Parent = lightingService
-            
             -- Apply fullbright settings
             lightingService.Ambient = Color3.new(1, 1, 1)
             lightingService.Brightness = 2
             lightingService.OutdoorAmbient = Color3.new(1, 1, 1)
+            lightingService.ColorShift_Top = Color3.new(0, 0, 0)
+            lightingService.ColorShift_Bottom = Color3.new(0, 0, 0)
+            
+            -- Create fullbright effect
+            local newLight = Instance.new("ColorCorrectionEffect")
+            newLight.Name = "VapeFullbright"
+            newLight.Brightness = 0.5
+            newLight.Contrast = 0.5
+            newLight.Saturation = 0
+            newLight.TintColor = Color3.new(1, 1, 1)
+            newLight.Parent = lightingService
+            
+            -- Also adjust other lighting properties for better fullbright
+            lightingService.FogEnd = 100000
+            lightingService.GlobalShadows = false
         end
     end
 
@@ -6275,7 +6247,52 @@ local Platform
         if originalLighting.OutdoorAmbient then
             lightingService.OutdoorAmbient = originalLighting.OutdoorAmbient
         end
+        if originalLighting.ColorShift_Top then
+            lightingService.ColorShift_Top = originalLighting.ColorShift_Top
+        end
+        if originalLighting.ColorShift_Bottom then
+            lightingService.ColorShift_Bottom = originalLighting.ColorShift_Bottom
+        end
+        
+        -- Restore default lighting properties
+        lightingService.FogEnd = originalLighting.FogEnd or 100000
+        lightingService.GlobalShadows = true
     end
+
+    Platform = vape.Categories.Utility:CreateModule({
+        Name = 'Platform in the Sky',
+        Function = function(callback)
+            if callback then
+                -- Create the platform if it doesn't exist
+                if not platformPart or not platformPart.Parent then
+                    platformPart = Instance.new('Part')
+                    platformPart.Size = Vector3.new(slider2 and slider2.Value or 100, 1, slider2 and slider2.Value or 100)
+                    platformPart.Position = Vector3.new(0, slider and slider.Value or 1000, 0)
+                    platformPart.Anchored = true
+                    platformPart.Parent = workspace
+                    platformPart.Material = Enum.Material.SmoothPlastic
+                    platformPart.CanCollide = true
+                    platformPart.Name = "VapeSkyPlatform"
+                    
+                    -- Apply fullbright if enabled
+                    if fullbrightToggle and fullbrightToggle.Enabled then
+                        applyFullBright()
+                    end
+                end
+            else
+                -- Delete the platform if it exists
+                if platformPart and platformPart.Parent then
+                    platformPart:Destroy()
+                    platformPart = nil
+                end
+                -- Restore original lighting when platform is disabled
+                if fullbrightToggle and fullbrightToggle.Enabled then
+                    restoreLighting()
+                end
+            end
+        end,
+        Tooltip = 'Creates a platform in the sky'
+    })
 
     fullbrightToggle = Platform:CreateToggle({
         Name = 'FullBright',
@@ -6286,7 +6303,8 @@ local Platform
                 restoreLighting()
             end
         end,
-        Tooltip = 'Toggles FullBright lighting on the platform'
+        Tooltip = 'Toggles FullBright lighting effect',
+        Default = false
     })
 
     slider = Platform:CreateSlider({
@@ -6319,7 +6337,7 @@ local Platform
         Name = 'Teleport to Platform',
         Function = function()
             if entitylib and entitylib.isAlive and platformPart and platformPart.Parent then
-                entitylib.character.RootPart.CFrame = CFrame.new(0, (slider and slider.Value or 1000) + 10, 0)
+                entitylib.character.HumanoidRootPart.CFrame = CFrame.new(platformPart.Position + Vector3.new(0, 10, 0))
             end
         end 
     })

@@ -28,6 +28,7 @@ local username
 local notp
 local TARGET_USERNAME
 local originalPosition
+local targets
 
 local function checkForTarget()
 	if not spin.Enabled then return end
@@ -93,16 +94,15 @@ notp = spin:CreateToggle({
 test = vape.Categories.Combat:CreateModule({
     Name = 'test',
     Function = function(callback)
-		local ent = entitylib.EntityMouse({
-			Part = 'RootPart',
-			Players = true,
-			Wallcheck = true,
-			Sort = function(a, b) return a.Magnitude < b.Magnitude end
-		})
 
-		if entitylib.isAlive then
-			print(entitylib.character.RootPart, 'local root from entity')
-		end
     end,
     Tooltip = 'test module'
+})
+
+targets = test:CreateTargets({
+    Players = true,
+    Function = function()
+        print('target check changed', targets.Players.Enabled)
+    end,
+    Tooltip = 'This is a test target list.'
 })

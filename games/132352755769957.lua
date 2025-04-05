@@ -60,8 +60,8 @@ spin = vape.Categories.Combat:CreateModule({
 
             checkForTarget()
         else
-			LocalPlayer.Character:FindFirstChild("HumanoidRootPart").CFrame = tonumber(pos)
-            print("Spin disabled")
+			LocalPlayer.Character:FindFirstChild("HumanoidRootPart").CFrame = pos
+			            print("Spin disabled")
         end
      
     end,

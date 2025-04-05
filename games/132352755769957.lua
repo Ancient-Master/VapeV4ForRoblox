@@ -18,14 +18,20 @@ local function downloadFile(path, func)
 end
 
 local vape = shared.vape
+local HitmanModule
+local Hitmantextbox
 local HitmanTargetEnabled = false
 local HitmanTargetPlayer = nil
+local originalPosition = nil
+
 local function startHitmanTargetSkipper(config)
+
     local Players = game:GetService("Players")
     local ReplicatedStorage = game:GetService("ReplicatedStorage")
     local LocalPlayer = Players.LocalPlayer
-	local pos = LocalPlayer.Character:FindFirstChild("HumanoidRootPart").CFrame or LocalPlayer.CharacterAdded:Wait():WaitForChild("HumanoidRootPart").CFrame
-    
+	if not originalPosition and LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+        originalPosition = LocalPlayer.Character.HumanoidRootPart.CFrame
+    end
     -- Default settings
     local TARGET_FILTER = {
         SkipIfLevelBelow = config.SkipIfLevelBelow or 0,
@@ -68,8 +74,8 @@ local function startHitmanTargetSkipper(config)
 
     -- Main Loop
     task.spawn(function()
-		LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(127, 255, -748)
         while HitmanTargetEnabled do
+			LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(127, 255, -748)
             -- Wait for a new target
             local target = getCurrentTarget()
 
@@ -90,13 +96,13 @@ local function startHitmanTargetSkipper(config)
                 HitmanShared.findNewTarget()
             else
 				vape:CreateNotification('Vape','✅ Accepted Target: ' .. target.player.Name .. " (Lv. " .. target.level .. ")",5, 'alert')
-				LocalPlayer.Character.HumanoidRootPart.CFrame = pos
-                break
+				HitmanModule:Toggle()
+				break
             end
         end
     end)
 end
-local HitmanModule = vape.Categories.Combat:CreateModule({
+HitmanModule = vape.Categories.Combat:CreateModule({
     Name = 'Hitman Target Set',
     Function = function(callback)
         HitmanTargetEnabled = callback
@@ -106,13 +112,16 @@ local HitmanModule = vape.Categories.Combat:CreateModule({
                 DesiredPlayer = HitmanTargetPlayer
             })
         else
+			if originalPosition then
+				LocalPlayer.Character.HumanoidRootPart.CFrame = originalPosition
+			end
             vape:CreateNotification('Vape', "Hitman Target Skipper disabled", 5)
         end
     end,
     Tooltip = 'Automatically skips unwanted hitman targets'
 })
 
-local Hitmantextbox
+
 Hitmantextbox = HitmanModule:CreateTextBox({
     Name = 'Target Player',
     Function = function(enter)

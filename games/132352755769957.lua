@@ -103,7 +103,7 @@ local HitmanModule = vape.Categories.Combat:CreateModule({
                 SkipIfLevelBelow = 0,
                 DesiredPlayer = HitmanTargetPlayer
             })
-			vape:HitmanModule:Toggle()
+			HitmanModule:Toggle()
         else
             vape:CreateNotification('Vape', "Hitman Target Skipper disabled", 5)
         end
@@ -117,7 +117,6 @@ Hitmantextbox = HitmanModule:CreateTextBox({
     Function = function(enter)
 		HitmanTargetPlayer = Hitmantextbox.Value
 		vape:CreateNotification('Vape',tostring(HitmanTargetPlayer), 5)
-
     end,
     Placeholder = 'Enter player name',
     Tooltip = 'Enter the player name you want to target',

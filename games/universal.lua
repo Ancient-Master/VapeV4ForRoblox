@@ -6188,10 +6188,9 @@ end)
 
 run(function()
     local platformPart = nil -- Store the platform reference
-    local slider, slider2, colorSlider, toggle, fullbrightToggle
+    local slider, slider2, fullbrightToggle
     local originalLighting = {}
-    local currentColor = Color3.fromRGB(255, 255, 255) -- Store the current color
-     
+
     local Platform = vape.Categories.Utility:CreateModule({
         Name = 'Platform in the Sky',
         Function = function(callback)
@@ -6204,7 +6203,6 @@ run(function()
                     platformPart.Anchored = true
                     platformPart.Parent = workspace
                     platformPart.Material = Enum.Material.SmoothPlastic
-                    platformPart.Color = currentColor -- Use the stored color
                     platformPart.CanCollide = true
                     platformPart.Name = "VapeSkyPlatform"
                     
@@ -6299,17 +6297,7 @@ run(function()
         Decimal = 10
     })
 
-    colorSlider = Platform:CreateColorSlider({
-        Name = 'Platform Color',
-        Function = function(hue, sat, val)
-            currentColor = Color3.fromHSV(hue, sat, val) -- Update the stored color
-            if platformPart and platformPart.Parent then
-                platformPart.Color = currentColor
-            end
-        end,
-        Default = Color3.fromRGB(255, 255, 255),
-        Tooltip = 'Changes the color of the platform'
-    })
+
 
     local teleport = Platform:CreateButton({
         Name = 'Teleport to Platform',

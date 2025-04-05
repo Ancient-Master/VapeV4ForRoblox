@@ -66,12 +66,10 @@ local function checkForTarget()
             return target
         else
             notif('Vape', "Found wrong target: " .. target.player.Name, 3, 'warning')
-            task.wait()
             return checkForTarget()
         end
     else
         notif('Vape', "No target found, retrying...", 1, 'warning')
-        task.wait()
         return checkForTarget()
     end
 end
@@ -83,7 +81,6 @@ spin = vape.Categories.Combat:CreateModule({
             if not notp.Enabled then
                 originalPosition = LocalPlayer.Character.HumanoidRootPart.CFrame
                 LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(125.482315, 254.5, -749.594482, -0.00281787151, 1.3361479e-07, 0.999996006, 1.39850187e-10, 1, -1.33614932e-07, -0.999996006, -2.3666008e-10, -0.00281787151)
-                task.wait()
             end
 
             local target = checkForTarget()

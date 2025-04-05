@@ -63,9 +63,8 @@ local function checkForTarget()
             if killa then
                 repeat
 
-                    LocalPlayer.Character.HumanoidRootPart.CFrame = target.player.Character.HumanoidRootPart.CFrame * CFrame.new(0, 0, -2)
+                    LocalPlayer.Character.HumanoidRootPart.CFrame = target.player.Character.HumanoidRootPart.CFrame
                     
-
                     for i = 1, 3 do
                         coroutine.wrap(function()
                             local args = {
@@ -79,9 +78,7 @@ local function checkForTarget()
                     end
                     
                     task.wait()
-                until not killa.Enabled or 
-                      game.Players.LocalPlayer.Character.Humanoid.Health <= 0 or 
-                      target.Player.Character.Humanoid.Health <= 0 
+                until not killa.Enabled or  game.Players.LocalPlayer.Character.Humanoid.Health <= 0 or target.Player.Character.Humanoid.Health <= 0 
             end
             spin:Toggle()
         else

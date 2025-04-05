@@ -101,8 +101,8 @@ test = vape.Categories.Combat:CreateModule({
 					Range = AttackRange.Value,
 					Wallcheck = Targets.Walls.Enabled or nil,
 					Part = 'RootPart',
-					Players = Targets.Players.Enabled
-				})
+					Players = Targets.Players.Enabled,
+				}),
 
 				task.wait()
 			until not test.Enabled

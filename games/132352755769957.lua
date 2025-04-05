@@ -57,7 +57,7 @@ local function checkForTarget()
     local target = HitmanShared.getCurrentTarget()
     if target then
         if string.lower(target.player.Name) == string.lower(TARGET_USERNAME) then
-            vnotif('Vape', "Successfully found target: " .. target.player.Name, 5,'warning')
+            notif('Vape', "Successfully found target: " .. target.player.Name, 5,'warning')
             spin:Toggle()
         else
             notif('Vape', "Found wrong target: " .. target.player.Name, 3, 'warning')

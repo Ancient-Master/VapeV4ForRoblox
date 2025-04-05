@@ -108,7 +108,7 @@ local HitmanModule = vape.Categories.Combat:CreateModule({
         if callback then
             startHitmanTargetSkipper({
                 SkipIfLevelBelow = 0,
-                DesiredPlayer = HitmanModuleTextbox.Value, -- Use the textbox value
+                DesiredPlayer = getgenv().HitmanTarget, -- Use the textbox value
                 MaxSkips = 200
             })
         else
@@ -122,8 +122,7 @@ local HitmanModule = vape.Categories.Combat:CreateModule({
 local HitmanModuleTextbox = HitmanModule:CreateTextBox({
     Name = 'Target Player',
     Function = function(enter)
-        -- This will update when the textbox value changes
-        print("Player name set to:", enter)
+		getgenv().HitmanTarget = enter
     end,
     Placeholder = 'Player Name',
     Tooltip = 'Enter the name of the player you want as your target.'

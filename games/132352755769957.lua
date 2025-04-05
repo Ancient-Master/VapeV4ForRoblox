@@ -103,6 +103,7 @@ local HitmanModule = vape.Categories.Combat:CreateModule({
                 SkipIfLevelBelow = 0,
                 DesiredPlayer = HitmanTargetPlayer
             })
+			vape:HitmanModule:Toggle()
         else
             vape:CreateNotification('Vape', "Hitman Target Skipper disabled", 5)
         end
@@ -115,7 +116,7 @@ Hitmantextbox = HitmanModule:CreateTextBox({
     Name = 'Animation',
     Function = function(enter)
 		HitmanTargetPlayer = Hitmantextbox.Value
-        print(Hitmantextbox.Value, enter, 'textbox value set')
+		vape:CreateNotification('Vape', "Player set to "..HitmanTargetPlayer, 5)
     end,
     Placeholder = 'anim (num only)',
     Tooltip = 'This is a test textbox.'

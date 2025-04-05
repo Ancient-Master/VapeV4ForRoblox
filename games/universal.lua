@@ -6213,7 +6213,7 @@ run(function()
                     platformPart.Name = "VapeSkyPlatform"
                     
                     -- Apply fullbright if enabled
-                    if fullbrightToggle and fullbrightToggle.Enabled then
+                    if Platform.Enabled and fullbrightToggle.Enabled then
                         applyFullBright()
                     end
                 end
@@ -6224,7 +6224,7 @@ run(function()
                     platformPart = nil
                 end
                 -- Restore original lighting when platform is disabled
-                if fullbrightToggle and fullbrightToggle.Enabled then
+                if not Platform.Enabled then
                     restoreLighting()
                 end
             end

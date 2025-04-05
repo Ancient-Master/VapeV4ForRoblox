@@ -6215,7 +6215,6 @@ run(function()
                 -- Delete the platform if it exists
                 if platformPart and platformPart.Parent then
                     platformPart:Destroy()
-                    platformPart = nil
                 end
                 -- Restore original lighting when platform is disabled
                 restoreLighting()

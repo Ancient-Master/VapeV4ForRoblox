@@ -95,17 +95,18 @@ notp = spin:CreateToggle({
 test = vape.Categories.Combat:CreateModule({
     Name = 'test',
     Function = function(callback)
-		if callback then
-			repeat
-				local plrs = entitylib.AllPosition({
-					Range = AttackRange.Value,
-					Wallcheck = Targets.Walls.Enabled or nil,
-					Part = 'RootPart',
-					Players = Targets.Players.Enabled,
-				}),
+        if callback then
+            repeat
+                local plrs = entitylib.AllPosition({
+                    Range = AttackRange.Value,
+                    Wallcheck = Targets.Walls.Enabled or nil,
+                    Part = 'RootPart',
+                    Players = Targets.Players.Enabled
+                })
 
-				task.wait()
-			until not test.Enabled
+                task.wait()
+            until not test.Enabled
+        end
     end,
     Tooltip = 'test module'
 })

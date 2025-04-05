@@ -25,10 +25,11 @@ local HitmanShared = require(ReplicatedStorage.Features.Hitman.HitmanShared)
 local entitylib = vape.Libraries.entity
 local spin
 local username
+local Targets
 local notp
 local TARGET_USERNAME
 local originalPosition
-local targets
+local test
 
 local function checkForTarget()
 	if not spin.Enabled then return end
@@ -99,10 +100,9 @@ test = vape.Categories.Combat:CreateModule({
     Tooltip = 'test module'
 })
 
-targets = test:CreateTargets({
-    Players = true,
+Targets = test:CreateTargets({
     Function = function()
-        print('target check changed', targets.Players.Enabled)
+        print('target check changed', Targets.Players.Enabled)
     end,
     Tooltip = 'This is a test target list.'
 })

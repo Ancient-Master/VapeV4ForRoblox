@@ -166,3 +166,14 @@ Angle = Killaura:CreateSlider({
     Max = 360,
     Default = 360
 })
+
+
+
+-- insert code here
+local test = vape.Categories.Blatant:CreateModule({
+    Name = 'Test',
+    Function = function(callback)
+        print(callback, 'module enabled!')
+    end,
+    Tooltip = 'This is a test module'
+})

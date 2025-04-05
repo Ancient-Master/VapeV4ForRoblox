@@ -79,7 +79,7 @@ local function startHitmanTargetSkipper(config)
 	
 				-- First check if target exists and has a player
 				if not target or not target.player then
-					vape:CreateNotification("Vape","⚠️ No target available, waiting...")
+					vape:CreateNotification("Vape","⚠️ No target available, waiting...", 'alert')
 					skips = skips + 1
 					HitmanShared.removeTarget()
 					HitmanShared.findNewTarget()

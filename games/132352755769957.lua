@@ -111,8 +111,8 @@ Killaura = vape.Categories.Combat:CreateModule({
 				if inputService:IsMouseButtonPressed(0) then return false end
 			end
         if callback then
-			while Killaura.Enabled do  -- Better to use while loop instead of repeat
-				local plrs = entitylib.AllPosition({
+				repeat
+					local plrs = entitylib.AllPosition({
 					Range = AttackRange.Value,
 					Wallcheck = Targets.Walls.Enabled or nil,
 					Part = 'RootPart',
@@ -141,37 +141,16 @@ Killaura = vape.Categories.Combat:CreateModule({
 							LocalPlayer.Character:FindFirstChild("Glass Shard")
 						}
 						Namespaces.MeleeReplication.packets.sendHit.send(args)
+
 					end
 				end
-
-
 			end
 
-
-
-			for i, v in Boxes do
-				v.Adornee = attacked[i] and attacked[i].RootPart or nil
-				if v.Adornee then
-					v.Color3 = Color3.fromHSV(BoxAttackColor.Hue, BoxAttackColor.Sat, BoxAttackColor.Value)
-					v.Transparency = 1 - BoxAttackColor.Opacity
-				end
-			end
-
-			for i, v in Particles do
-				v.Position = attacked[i] and attacked[i].RootPart.Position or Vector3.new(9e9, 9e9, 9e9)
-				v.Parent = attacked[i] and gameCamera or nil
-			end
 
 			task.wait(0.05)
-        end
+	until not Killaura.Enabled
     else
-		for i, v in Boxes do
-			v.Adornee = nil
-		end
-		for i, v in Particles do
-			v.Parent = nil
-            task.wait(0.05)
-		end
+
     end
 end,
     Tooltip = 'test module'
@@ -201,26 +180,4 @@ Angle = Killaura:CreateSlider({
 	Max = 360,
 	Default = 360
 })
-Killaura:CreateToggle({
-	Name = 'Show target',
-	Function = function(callback)
-		BoxAttackColor.Object.Visible = callback
-		if callback then
-			for i = 1, 10 do
-				local box = Instance.new('BoxHandleAdornment')
-				box.Adornee = nil
-				box.AlwaysOnTop = true
-				box.Size = Vector3.new(3, 5, 3)
-				box.CFrame = CFrame.new(0, -0.5, 0)
-				box.ZIndex = 0
-				box.Parent = vape.gui
-				Boxes[i] = box
-			end
-		else
-			for i, v in Boxes do
-				v:Destroy()
-			end
-			table.clear(Boxes)
-		end
-	end
-})
+

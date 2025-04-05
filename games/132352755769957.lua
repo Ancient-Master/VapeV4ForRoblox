@@ -35,7 +35,7 @@ local AttackRange
 
 local function checkForTarget()
 	if not spin.Enabled then return end
-	if not LocalPlayer.Team == game.Teams.Patient then
+	if not LocalPlayer.Team == game.Teams.PATIENT then
 		vape:CreateNotification('Vape',"\n🚫 You are not in the Patient team!", 5, 'warning')
 		return
 	end

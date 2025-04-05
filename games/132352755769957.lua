@@ -133,8 +133,8 @@ Killaura = vape.Categories.Combat:CreateModule({
 						for i = 1, 3 do
 							coroutine.wrap(function()
 							local args = {
-                            v.Player.Character.Humanoid,
-                            v.Player.Character.Head,
+                            v.Humanoid,
+                            v.Head,
                             LocalPlayer.Character:FindFirstChild("Glass Fragment")
                         }
                         Namespaces.MeleeReplication.packets.sendHit.send(args)

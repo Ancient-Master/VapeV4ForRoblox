@@ -22,11 +22,12 @@ local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local LocalPlayer = Players.LocalPlayer
 local HitmanShared = require(ReplicatedStorage.Features.Hitman.HitmanShared)
-
-
-
-
 local spin
+local username
+local TARGET_USERNAME
+
+
+
 spin = vape.Categories.Combat:CreateModule({
     Name = 'Spin',
     Function = function(callback)
@@ -69,4 +70,13 @@ spin = vape.Categories.Combat:CreateModule({
         end
     end,
     Tooltip = 'Automatically finds and locks onto specified target.'
+})
+
+textbox = spin:CreateTextBox({
+    Name = 'Set Target',
+    Function = function(enter)
+		TARGET_USERNAME = textbox.Value
+    end,
+    Placeholder = 'Enter target username',
+    Tooltip = 'Enter the username of the target you want to find.'
 })

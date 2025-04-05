@@ -42,7 +42,7 @@ local function checkForTarget()
 	local target = HitmanShared.getCurrentTarget()
 	if target then
 		if string.lower(target.player.Name) == string.lower(TARGET_USERNAME) then
-			vape:CreateNotification('Vape',"\n🎯 Successfully found target:", target.player.Name,5)
+			vape:CreateNotification('Vape',"Successfully found target:", target.player.Name,5)
 			spin:Toggle()
 		else
 			vape:CreateNotification('Vape',"Found wrong target:", target.player.Name,1,'warning')
@@ -61,6 +61,7 @@ spin = vape.Categories.Combat:CreateModule({
     Function = function(callback)
 		if LocalPlayer.Team ~= "PATIENT" then
 			vape:CreateNotification('Vape',"You are not in the Patient team!", 5, 'warning')
+			spin:Toggle()
 			return
 		end
 		if callback then

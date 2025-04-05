@@ -6197,8 +6197,7 @@ run(function()
 			platform2.Parent = workspace
 			platform2.Material = Enum.Material.SmoothPlastic
 			platform2.Color = Color3.fromRGB(255, 255, 255)
-			platform2.CanCollide = false
-			vape.Clean(platform2)
+			platform2.CanCollide = true
 		else
 			for _, v in workspace:GetChildren() do
 				if v:IsA('Part') and v.Size == Vector3.new(100, 1, 100) and v.Position == Vector3.new(0, slider.Value, 0) then
@@ -6223,12 +6222,27 @@ local slider = Platform:CreateSlider({
 	end,
 	Decimal = 10
 })
+local slider = Platform:CreateSlider({
+	Name = 'Platform Size',
+	Min = 0,
+	Max = 1000,
+	Default = 1000,
+	Function = function(val)
+		for _, v in workspace:GetChildren() do
+			if v:IsA('Part') and v.Size == Vector3.new(100, 1, 100) then
+				v.Size = Vector3.new(val, 1, val)
+			end
+		end
+	end,
+
+	Decimal = 10
+})
 
 local teleport = Platform:CreateButton({
 	Name = 'Teleport to Platform',
 	Function = function()
 		if entitylib.isAlive then
-			entitylib.character.RootPart.CFrame = CFrame.new(0, slider.Value, 0)
+			entitylib.character.RootPart.CFrame = CFrame.new(0, slider.Value, 0) * CFrame.New(0, 10, 0)
 		end
 	end
 })

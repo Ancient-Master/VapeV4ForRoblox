@@ -110,7 +110,7 @@ local HitmanModule = vape.Categories.Combat:CreateModule({
     end,
     Tooltip = 'Automatically skips unwanted hitman targets'
 })
-
+local HitmanModuleTextbox
 local HitmanModuleTextbox = HitmanModule:CreateTextBox({
     Name = 'Target Player',
     Function = function(text)

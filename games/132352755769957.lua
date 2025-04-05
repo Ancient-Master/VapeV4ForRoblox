@@ -30,6 +30,8 @@ local notp
 local TARGET_USERNAME
 local originalPosition
 local test
+local Angle
+local AttackRange
 
 local function checkForTarget()
 	if not spin.Enabled then return end
@@ -110,6 +112,13 @@ test = vape.Categories.Combat:CreateModule({
     end,
     Tooltip = 'test module'
 })
+Targets = test:CreateTargets({
+	Players = true,
+    Function = function()
+
+    end,
+    Tooltip = 'Select targets to track.'
+})
 AttackRange = test:CreateSlider({
 	Name = 'Attack range',
 	Min = 1,
@@ -119,10 +128,9 @@ AttackRange = test:CreateSlider({
 		return val == 1 and 'stud' or 'studs' 
 	end
 })
-Targets = test:CreateTargets({
-	Players = true,
-    Function = function()
-
-    end,
-    Tooltip = 'Select targets to track.'
+Angle = test:CreateSlider({
+	Name = 'Max angle',
+	Min = 1,
+	Max = 360,
+	Default = 360
 })

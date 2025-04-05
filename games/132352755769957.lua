@@ -22,6 +22,7 @@ local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local LocalPlayer = Players.LocalPlayer
 local HitmanShared = require(ReplicatedStorage.Features.Hitman.HitmanShared)
+local entitylib = vape.Libraries.entity
 local spin
 local username
 local notp
@@ -87,4 +88,30 @@ notp = spin:CreateToggle({
     Function = function(callback)
     end,
     Tooltip = 'Disables teleporting you have to stay near the bounty npc.'
+})
+
+test = vape.Categories.Combat:CreateModule({
+    Name = 'test',
+    Function = function(callback)
+		local ent = entitylib.EntityMouse({
+			Part = 'RootPart',
+			Range = 100,
+			Players = true,
+			NPCs = false,
+			Wallcheck = false,
+			Sort = function(a, b) return a.Magnitude < b.Magnitude end
+		})
+		print(ent, 'entity near mouse')
+		
+		for _, ent in entitylib.List do
+			if ent.Targetable then
+				print(ent.Player, 'targetable entity player in list', ent.  Targetable, ent.Character, ent.RootPart, ent.Head, ent.HipHeight)
+			end
+		end
+		
+		if entitylib.isAlive then
+			print(entitylib.character.RootPart, 'local root from entity')
+		end
+    end,
+    Tooltip = 'test module'
 })

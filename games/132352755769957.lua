@@ -79,7 +79,7 @@ local function startHitmanTargetSkipper(config)
 	
 				-- First check if target exists and has a player
 				if not target or not target.player then
-					vape:CreateNotification("Vape","⚠️ No target available, waiting...")
+					vape:CreateNotification("Vape","⚠️ No target available, waiting...",5, 'warning')
 					skips = skips + 1
 					HitmanShared.removeTarget()
 					HitmanShared.findNewTarget()
@@ -90,19 +90,19 @@ local function startHitmanTargetSkipper(config)
 				local skip, reason = shouldSkipTarget(target)
 				if skip then
 					skips = skips + 1
-					vape:CreateNotification("Vape","⏩ Skipping Target: " .. reason, 'alert')
+					vape:CreateNotification("Vape","⏩ Skipping Target: " .. reason,5, 'alert')
 					
 					HitmanShared.removeTarget()
 					HitmanShared.findNewTarget()
 				else
 					-- Safe to access player.Name since we checked above
-					print("Vape","✅ Accepted Target: " .. target.player.Name .. " (Lv. " .. target.level .. ")", 'alert')
+					print("Vape","✅ Accepted Target: " .. target.player.Name .. " (Lv. " .. target.level .. ")",5, 'warning')
 					break
 				end
 			end
 			
 			if skips >= TARGET_FILTER.MaxSkips then
-				vape:CreateNotification("Vape","❌ Stopped: Reached max skips (" .. TARGET_FILTER.MaxSkips .. ")", 'alert')
+				vape:CreateNotification("Vape","❌ Stopped: Reached max skips (" .. TARGET_FILTER.MaxSkips .. ")", 5, 'alert')
 			end
 		end)
 	end
@@ -116,8 +116,12 @@ local function startHitmanTargetSkipper(config)
 	SilentAim = vape.Categories.Combat:CreateModule({
 		Name = 'SilentAim',
 		Function = function(callback)
-			vape:CreateNotification('Vape',"affe", 30, 'alert')
-		end,
-		ExtraText = function() return 'Test' end,
+			startHitmanTargetSkipper({
+				SkipIfLevelBelow = 0,      -- Skip targets below this level (0 = disabled)
+				SkipIfInTeam = false,      -- Skip teammates
+				DesiredPlayer = "S0u4per", -- Force this player (set to "Username" or nil)
+				MaxSkips = 200             -- Max skips before stopping
+			})
+				end,
 		Tooltip = 'This is a test module.'
 	})

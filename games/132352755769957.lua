@@ -141,8 +141,6 @@ Killaura = vape.Categories.Combat:CreateModule({
 })
 
 Targets = Killaura:CreateTargets({Players = true})
-autoequip = Killaura:CreateToggle({Name = 'Equip Weapon'})
-
 AttackRange = Killaura:CreateSlider({
     Name = 'Attack range',
     Min = 1,

@@ -80,6 +80,7 @@ spin = vape.Categories.Combat:CreateModule({
         if callback then
             if not notp.Enabled then
                 originalPosition = LocalPlayer.Character.HumanoidRootPart.CFrame
+                task.wait(0.5)
                 LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(125.482315, 254.5, -749.594482, -0.00281787151, 1.3361479e-07, 0.999996006, 1.39850187e-10, 1, -1.33614932e-07, -0.999996006, -2.3666008e-10, -0.00281787151)
             end
 

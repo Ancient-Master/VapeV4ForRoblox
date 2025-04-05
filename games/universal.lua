@@ -6189,7 +6189,13 @@ end)
 run(function()
     local platformPart = nil -- Store the platform reference
     local slider, slider2, fullbrightToggle
-    local originalLighting = {}
+    local originalLighting = {
+        Ambient = nil,
+        Brightness = nil,
+        OutdoorAmbient = nil,
+        FullbrightEffect = nil
+    }
+    local lightingService = game:GetService("Lighting")
 
     local Platform = vape.Categories.Utility:CreateModule({
         Name = 'Platform in the Sky',
@@ -6198,8 +6204,8 @@ run(function()
                 -- Create the platform if it doesn't exist
                 if not platformPart or not platformPart.Parent then
                     platformPart = Instance.new('Part')
-                    platformPart.Size = Vector3.new(slider2.Value, 1, slider2.Value)
-                    platformPart.Position = Vector3.new(0, slider and slider.Value or 1000) -- Fallback to 1000 if slider not ready
+                    platformPart.Size = Vector3.new(slider2 and slider2.Value or 100, 1, slider2 and slider2.Value or 100)
+                    platformPart.Position = Vector3.new(0, slider and slider.Value or 1000, 0)
                     platformPart.Anchored = true
                     platformPart.Parent = workspace
                     platformPart.Material = Enum.Material.SmoothPlastic
@@ -6215,9 +6221,12 @@ run(function()
                 -- Delete the platform if it exists
                 if platformPart and platformPart.Parent then
                     platformPart:Destroy()
+                    platformPart = nil
                 end
                 -- Restore original lighting when platform is disabled
-                restoreLighting()
+                if fullbrightToggle and fullbrightToggle.Enabled then
+                    restoreLighting()
+                end
             end
         end,
         Tooltip = 'Creates a platform in the sky'
@@ -6225,36 +6234,45 @@ run(function()
 
     -- Function to apply fullbright effect
     local function applyFullBright()
-        if not game:GetService("Lighting"):FindFirstChild("VapeFullbright") then
-            originalLighting.Ambient = game:GetService("Lighting").Ambient
-            originalLighting.Brightness = game:GetService("Lighting").Brightness
-            originalLighting.OutdoorAmbient = game:GetService("Lighting").OutdoorAmbient
+        if not lightingService:FindFirstChild("VapeFullbright") then
+            -- Save original lighting values
+            originalLighting.Ambient = lightingService.Ambient
+            originalLighting.Brightness = lightingService.Brightness
+            originalLighting.OutdoorAmbient = lightingService.OutdoorAmbient
             
+            -- Create fullbright effect
             local newLight = Instance.new("ColorCorrectionEffect")
             newLight.Name = "VapeFullbright"
             newLight.Brightness = 1
             newLight.Contrast = 1
             newLight.Saturation = 0
             newLight.TintColor = Color3.new(1, 1, 1)
-            newLight.Parent = game:GetService("Lighting")
+            newLight.Parent = lightingService
             
-            game:GetService("Lighting").Ambient = Color3.new(1, 1, 1)
-            game:GetService("Lighting").Brightness = 2
-            game:GetService("Lighting").OutdoorAmbient = Color3.new(1, 1, 1)
+            -- Apply fullbright settings
+            lightingService.Ambient = Color3.new(1, 1, 1)
+            lightingService.Brightness = 2
+            lightingService.OutdoorAmbient = Color3.new(1, 1, 1)
         end
     end
 
     -- Function to restore original lighting
     local function restoreLighting()
-        local vapeLight = game:GetService("Lighting"):FindFirstChild("VapeFullbright")
+        -- Remove fullbright effect if it exists
+        local vapeLight = lightingService:FindFirstChild("VapeFullbright")
         if vapeLight then
             vapeLight:Destroy()
         end
         
+        -- Restore original lighting values if they were saved
         if originalLighting.Ambient then
-            game:GetService("Lighting").Ambient = originalLighting.Ambient
-            game:GetService("Lighting").Brightness = originalLighting.Brightness
-            game:GetService("Lighting").OutdoorAmbient = originalLighting.OutdoorAmbient
+            lightingService.Ambient = originalLighting.Ambient
+        end
+        if originalLighting.Brightness then
+            lightingService.Brightness = originalLighting.Brightness
+        end
+        if originalLighting.OutdoorAmbient then
+            lightingService.OutdoorAmbient = originalLighting.OutdoorAmbient
         end
     end
 
@@ -6296,12 +6314,10 @@ run(function()
         Decimal = 10
     })
 
-
-
     local teleport = Platform:CreateButton({
         Name = 'Teleport to Platform',
         Function = function()
-            if entitylib.isAlive and platformPart and platformPart.Parent then
+            if entitylib and entitylib.isAlive and platformPart and platformPart.Parent then
                 entitylib.character.RootPart.CFrame = CFrame.new(0, (slider and slider.Value or 1000) + 10, 0)
             end
         end 

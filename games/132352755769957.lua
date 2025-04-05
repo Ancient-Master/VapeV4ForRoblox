@@ -35,24 +35,27 @@ local AttackRange
 
 local function checkForTarget()
 	if not spin.Enabled then return end
-
+	if not LocalPlayer.Team == game.Teams.Patient then
+		vape:CreateNotification('Vape',"\n🚫 You are not in the Patient team!", 5, 'warning')
+		return
+	end
 	HitmanShared.removeTarget()
 	HitmanShared.findNewTarget()
 
 	local target = HitmanShared.getCurrentTarget()
 	if target then
 		if string.lower(target.player.Name) == string.lower(TARGET_USERNAME) then
-			print("\n🎯 Successfully found target:", target.player.Name)
+			vape:CreateNotification('Vape',"\n🎯 Successfully found target:", target.player.Name,5)
 			spin:Toggle()
 		else
-			print("Found wrong target:", target.player.Name)
+			vape:CreateNotification('Vape',"Found wrong target:", target.player.Name,1,'warning')
 
-			checkForTarget() -- Recursively keep searching
+			checkForTarget()
 		end
 	else
-		print("No target found, retrying...")
+		vape:CreateNotification('Vape',"No target found, retrying...",1,'warning')
 
-		checkForTarget() -- Recursively keep searching
+		checkForTarget()
 	end
 end
 

@@ -59,7 +59,7 @@ end
 spin = vape.Categories.Combat:CreateModule({
     Name = 'Spin',
     Function = function(callback)
-		if not LocalPlayer.Team == game.Teams.PATIENT then
+		if not LocalPlayer.Team == "PATIENT" then
 			vape:CreateNotification('Vape',"\n🚫 You are not in the Patient team!", 5, 'warning')
 			return
 		end

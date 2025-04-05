@@ -6190,6 +6190,7 @@ run(function()
     local platformPart = nil -- Store the platform reference
     local slider, slider2, colorSlider, toggle, fullbrightToggle
     local originalLighting = {}
+    local currentColor = Color3.fromRGB(255, 255, 255) -- Store the current color
      
     local Platform = vape.Categories.Utility:CreateModule({
         Name = 'Platform in the Sky',
@@ -6203,7 +6204,7 @@ run(function()
                     platformPart.Anchored = true
                     platformPart.Parent = workspace
                     platformPart.Material = Enum.Material.SmoothPlastic
-                    platformPart.Color = colorSlider and colorSlider.Rainbow or Color3.fromRGB(255, 255, 255)
+                    platformPart.Color = currentColor -- Use the stored color
                     platformPart.CanCollide = true
                     platformPart.Name = "VapeSkyPlatform"
                     
@@ -6301,9 +6302,9 @@ run(function()
     colorSlider = Platform:CreateColorSlider({
         Name = 'Platform Color',
         Function = function(hue, sat, val)
-            local color = Color3.fromHSV(hue, sat, val)
+            currentColor = Color3.fromHSV(hue, sat, val) -- Update the stored color
             if platformPart and platformPart.Parent then
-                platformPart.Color = color
+                platformPart.Color = currentColor
             end
         end,
         Default = Color3.fromRGB(255, 255, 255),
@@ -6316,10 +6317,9 @@ run(function()
             if entitylib.isAlive and platformPart and platformPart.Parent then
                 entitylib.character.RootPart.CFrame = CFrame.new(0, (slider and slider.Value or 1000) + 10, 0)
             end
-        end
+        end 
     })
 end)
-	
 -- Panic button (unchanged, works fine)
 run(function()
     vape.Categories.Utility:CreateModule({

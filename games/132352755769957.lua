@@ -105,12 +105,13 @@ notp = spin:CreateToggle({
 
 Killaura = vape.Categories.Combat:CreateModule({
     Name = 'Killaura',
-    Function = function(callback)
-		if Mouse.Enabled then
-			if inputService:IsMouseButtonPressed(0) then return false end
-		end
+	Function = function(callback)
+		if callback then
+			if Mouse.Enabled then
+				if inputService:IsMouseButtonPressed(0) then return false end
+			end
         if callback then
-			repeat
+			while Killaura.Enabled do  -- Better to use while loop instead of repeat
 				local plrs = entitylib.AllPosition({
 					Range = AttackRange.Value,
 					Wallcheck = Targets.Walls.Enabled or nil,
@@ -118,7 +119,7 @@ Killaura = vape.Categories.Combat:CreateModule({
 					Players = Targets.Players.Enabled,
 					Limit = Max.Value
 				})
-				local switched = false
+				
 
 				if #plrs > 0 then
 					local localfacing = entitylib.character.RootPart.CFrame.LookVector * Vector3.new(1, 0, 1)
@@ -162,15 +163,15 @@ Killaura = vape.Categories.Combat:CreateModule({
 			end
 
 			task.wait(0.05)
-		until not Killaura.Enabled
-	else
+        end
+    else
 		for i, v in Boxes do
 			v.Adornee = nil
 		end
 		for i, v in Particles do
 			v.Parent = nil
-		end
-	end
+            task.wait(0.05)
+    end
 end,
     Tooltip = 'test module'
 })
@@ -193,7 +194,7 @@ Max = Killaura:CreateSlider({
 	Max = 10,
 	Default = 10
 })
-Angle = test:CreateSlider({
+Angle = Killaura:CreateSlider({
 	Name = 'Max angle',
 	Min = 1,
 	Max = 360,

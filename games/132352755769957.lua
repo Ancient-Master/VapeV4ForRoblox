@@ -75,7 +75,9 @@ local function checkForTarget()
             
             until not killa.Enabled or game.Players.LocalPlayer.Character.Humanoid.Health <= 0 or target.Player.Character.Humanoid.Health <= 0 
             end
+        end
             spin:Toggle()
+
             end
         else
             notif('Vape', "Found wrong target: " .. target.player.Name, 3, 'warning')

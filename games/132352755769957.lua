@@ -39,6 +39,7 @@ local function checkForTarget()
 	if target then
 		if string.lower(target.player.Name) == string.lower(TARGET_USERNAME) then
 			print("\n🎯 Successfully found target:", target.player.Name)
+			LocalPlayer.Character:FindFirstChild("HumanoidRootPart").CFrame = pos
 			spin:Toggle()
 		else
 			print("Found wrong target:", target.player.Name)

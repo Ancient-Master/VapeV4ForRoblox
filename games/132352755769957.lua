@@ -49,26 +49,24 @@ local function notif(...)
 end
 
 local function checkForTarget()
-	if not spin.Enabled then return end
+    if not spin.Enabled then return end
 
-	HitmanShared.removeTarget()
-	HitmanShared.findNewTarget()
+    HitmanShared.removeTarget()
+    HitmanShared.findNewTarget()
 
-	local target = HitmanShared.getCurrentTarget()
-	if target then
-		if string.lower(target.player.Name) == string.lower(TARGET_USERNAME) then
-			vnotif('Vape',"Successfully found target:".. target.player.Name.. ,5)
-			spin:Toggle()
-		else
-			notif('Vape',"Found wrong target:".. target.player.Name .. ,1,'warning')
-
-			checkForTarget()
-		end
-	else
-		notif('Vape',"No target found, retrying...",1,'warning')
-
-		checkForTarget()
-	end
+    local target = HitmanShared.getCurrentTarget()
+    if target then
+        if string.lower(target.player.Name) == string.lower(TARGET_USERNAME) then
+            vnotif('Vape', "Successfully found target: " .. target.player.Name, 5)
+            spin:Toggle()
+        else
+            notif('Vape', "Found wrong target: " .. target.player.Name, 1, 'warning')
+            checkForTarget()
+        end
+    else
+        notif('Vape', "No target found, retrying...", 1, 'warning')
+        checkForTarget()
+    end
 end
 
 spin = vape.Categories.Combat:CreateModule({

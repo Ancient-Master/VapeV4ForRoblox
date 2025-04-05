@@ -61,56 +61,57 @@ local function checkForTarget()
         if string.lower(target.player.Name) == string.lower(TARGET_USERNAME) then
             notif('Vape', "Successfully found target: " .. target.player.Name, 5)
             if not killa.Enabled then
-            spin:Toggle()
+                spin:Toggle()
             end
+            return target
         else
             notif('Vape', "Found wrong target: " .. target.player.Name, 3, 'warning')
-            checkForTarget()
+            task.wait(1)
+            return checkForTarget()
         end
     else
         notif('Vape', "No target found, retrying...", 1, 'warning')
-        checkForTarget()
+        task.wait(1)
+        return checkForTarget()
     end
 end
+
 spin = vape.Categories.Combat:CreateModule({
     Name = 'Spin',
     Function = function(callback)
-		if callback then
-			if not notp.Enabled then
-				originalPosition = LocalPlayer.Character.HumanoidRootPart.CFrame
-				LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(125.482315, 254.5, -749.594482, -0.00281787151, 1.3361479e-07, 0.999996006, 1.39850187e-10, 1, -1.33614932e-07, -0.999996006, -2.3666008e-10, -0.00281787151)
-				task.wait(0.5)
-			end
-
-            checkForTarget()
-            if killa.Enabled then 
-                repeat
-                local target = HitmanShared.getCurrentTarget()
-                LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(target.player.Character.HumanoidRootPart.Position)
-                targetinfo.Targets[target] = tick() + 1
-                if target then
-                    local args = {
-                        target.player.Character.Humanoid,
-                        target.player.Character.Head,
-                        LocalPlayer.Character:FindFirstChildOfClass("Tool") or nil
-                    }
-                    Namespaces.MeleeReplication.packets.sendHit.send(args)
-                end
+        if callback then
+            if not notp.Enabled then
+                originalPosition = LocalPlayer.Character.HumanoidRootPart.CFrame
+                LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(125.482315, 254.5, -749.594482, -0.00281787151, 1.3361479e-07, 0.999996006, 1.39850187e-10, 1, -1.33614932e-07, -0.999996006, -2.3666008e-10, -0.00281787151)
+                task.wait(0.5)
             end
-            task.wait()
-        until target.player.Character.Humanoid.Health <= 0 or not killa.Enabled or localPlayer.Character.Humanoid.Health <= 0
+
+            local target = checkForTarget()
+            
+            if killa.Enabled and target then 
+                repeat
+                    if target and target.player and target.player.Character and target.player.Character.HumanoidRootPart then
+                        LocalPlayer.Character.HumanoidRootPart.CFrame = target.player.Character.HumanoidRootPart.CFrame * CFrame.new(0, 0, -2)
+                        
+                        local args = {
+                            target.player.Character.Humanoid,
+                            target.player.Character.Head,
+                            LocalPlayer.Character:FindFirstChildOfClass("Tool") or nil
+                        }
+                        Namespaces.MeleeReplication.packets.sendHit.send(args)
+                    end
+                    task.wait(0.1)
+                until not target or not target.player or not target.player.Character or 
+                      target.player.Character.Humanoid.Health <= 0 or 
+                      not killa.Enabled or 
+                      LocalPlayer.Character.Humanoid.Health <= 0
             end
         else
-            if not notp.Enabled then
+            print("Spin disabled")
+            if not notp.Enabled and originalPosition then
                 LocalPlayer.Character.HumanoidRootPart.CFrame = originalPosition
             end
-        else
-			            print("Spin disabled")
-						if not notp.Enabled then
-						LocalPlayer.Character.HumanoidRootPart.CFrame = originalPosition
-						end
         end
-     
     end,
     Tooltip = 'Automatically finds and locks onto specified target.'
 })

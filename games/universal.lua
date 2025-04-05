@@ -6187,6 +6187,7 @@ run(function()
 end)
 
 run(function()
+local Platform
     local platformPart = nil -- Store the platform reference
     local slider, slider2, fullbrightToggle
     local originalLighting = {
@@ -6197,7 +6198,7 @@ run(function()
     }
     local lightingService = game:GetService("Lighting")
 
-    local Platform = vape.Categories.Utility:CreateModule({
+    Platform = vape.Categories.Utility:CreateModule({
         Name = 'Platform in the Sky',
         Function = function(callback)
             if callback then
@@ -6224,7 +6225,7 @@ run(function()
                     platformPart = nil
                 end
                 -- Restore original lighting when platform is disabled
-                if not Platform.Enabled then
+                if not Platform.Enabled or not fullbrightToggle.Enabled then
                     restoreLighting()
                 end
             end

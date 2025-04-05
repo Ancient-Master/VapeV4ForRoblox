@@ -18,7 +18,15 @@ local function downloadFile(path, func)
 end
 
 local vape = shared.vape
+local entitylib = vape.Libraries.entity
 local targetinfo = vape.Libraries.targetinfo
+local sessioninfo = vape.Libraries.sessioninfo
+local uipallet = vape.Libraries.uipallet
+local tween = vape.Libraries.tween
+local color = vape.Libraries.color
+local whitelist = vape.Libraries.whitelist
+local prediction = vape.Libraries.prediction
+local getcustomasset = vape.Libraries.getcustomasset
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local LocalPlayer = Players.LocalPlayer

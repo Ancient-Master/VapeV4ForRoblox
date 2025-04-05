@@ -109,10 +109,7 @@ Killaura = vape.Categories.Combat:CreateModule({
             if Mouse.Enabled then
                 if inputService:IsMouseButtonPressed(0) then return false end
             end
-            
-            local attacked = {}
-            local targetinfo = { Targets = {} }
-            
+
             repeat
                 local plrs = entitylib.AllPosition({
                     Range = AttackRange.Value,
@@ -129,22 +126,22 @@ Killaura = vape.Categories.Combat:CreateModule({
                         local delta = (v.RootPart.Position - entitylib.character.RootPart.Position)
                         local angle = math.acos(localfacing:Dot((delta * Vector3.new(1, 0, 1)).Unit))
                         if angle > (math.rad(Angle.Value) / 2) then continue end
-                        table.insert(attacked, v)
-                        targetinfo.Targets[v] = tick() + 1
-
                         --if not Swing.Enabled then
                         --    skywars.MeleeController:playAnimation(lplr.Character, tool)
                         --end
-
-                        local args = {
+						for i = 1, 3 do
+							coroutine.wrap(function()
+							local args = {
                             v.Player.Character.Humanoid,
                             v.Player.Character.Torso,
                             LocalPlayer.Character:FindFirstChild("Glass Fragment")
                         }
                         Namespaces.MeleeReplication.packets.sendHit.send(args)
+						end)()
+					end
                     end
                 end
-                task.wait(0.05)
+                task.wait()
             until not Killaura.Enabled
         end
     end,

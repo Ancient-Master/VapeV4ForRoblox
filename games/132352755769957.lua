@@ -58,13 +58,11 @@ local function checkForTarget()
     local target = HitmanShared.getCurrentTarget()
     if not target then
         notif('Vape', "No target found, retrying...", 1, 'warning')
-        task.wait(1)
         return checkForTarget()
     end
 
     if string.lower(target.player.Name) ~= string.lower(TARGET_USERNAME) then
         notif('Vape', "Found wrong target: " .. target.player.Name, 3, 'warning')
-        task.wait(1)
         return checkForTarget()
     end
 
@@ -73,9 +71,7 @@ local function checkForTarget()
     if not killa then return end
     
     -- Main combat loop
-    while killa.Enabled and 
-          target and target.Player and target.Player.Character and 
-          LocalPlayer.Character and 
+    while killa.Enabled and
           LocalPlayer.Character.Humanoid.Health > 0 and
           target.Player.Character.Humanoid.Health > 0 do
         
@@ -92,10 +88,10 @@ local function checkForTarget()
                 }
                 Namespaces.MeleeReplication.packets.sendHit.send(args)
             end)()
-            task.wait(0.1) -- Small delay between attacks
+
         end
         
-        task.wait(0.2) -- Brief pause between attack cycles
+
     end
 
     spin:Toggle()

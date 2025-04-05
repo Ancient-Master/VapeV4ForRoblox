@@ -24,6 +24,7 @@ local LocalPlayer = Players.LocalPlayer
 local HitmanShared = require(ReplicatedStorage.Features.Hitman.HitmanShared)
 local spin
 local username
+local notp
 local TARGET_USERNAME
 local originalPosition
 
@@ -54,14 +55,19 @@ spin = vape.Categories.Combat:CreateModule({
     Name = 'Spin',
     Function = function(callback)
 		if callback then
-			originalPosition = LocalPlayer.Character.HumanoidRootPart.CFrame
-            LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(125.482315, 254.5, -749.594482, -0.00281787151, 1.3361479e-07, 0.999996006, 1.39850187e-10, 1, -1.33614932e-07, -0.999996006, -2.3666008e-10, -0.00281787151)
-            task.wait(0.5)
+			if notp then
+				originalPosition = LocalPlayer.Character.HumanoidRootPart.CFrame
+				LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(125.482315, 254.5, -749.594482, -0.00281787151, 1.3361479e-07, 0.999996006, 1.39850187e-10, 1, -1.33614932e-07, -0.999996006, -2.3666008e-10, -0.00281787151)
+				task.wait(0.5)
+				continue
+			end
+
             checkForTarget()
         else
 			            print("Spin disabled")
+						if notp then
 						LocalPlayer.Character.HumanoidRootPart.CFrame = originalPosition
-            
+						end
         end
      
     end,
@@ -75,4 +81,11 @@ username = spin:CreateTextBox({
     end,
     Placeholder = 'Enter target username',
     Tooltip = 'Enter the username of the target you want to find.'
+})
+
+notp = spin:CreateToggle({
+    Name = 'No Teleport',
+    Function = function(callback)
+    end,
+    Tooltip = 'Disables teleporting you have to stay near the bounty npc.'
 })

@@ -28,20 +28,12 @@ local whitelist = vape.Libraries.whitelist
 local prediction = vape.Libraries.prediction
 local getcustomasset = vape.Libraries.getcustomasset
 local Players = game:GetService("Players")
-local RunService = game:GetService("RunService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local LocalPlayer = Players.LocalPlayer
 local HitmanShared = require(ReplicatedStorage.Features.Hitman.HitmanShared)
 local entitylib = vape.Libraries.entity
 local Namespaces = require(ReplicatedStorage.Service.Namespaces)
-local healRemote = ReplicatedStorage.Remote.AttemptHeal
-local VALID_TOOLS = {"Medical Kit", "Quick-Fix", "Large Medical Kit"}
-local currentTool = nil
-local SelfHeal
-local backpack = LocalPlayer:FindFirstChild("Backpack")
-local HealOthers
 local spin
-local HealAura
 local username123
 local Targets
 local notp
@@ -76,64 +68,6 @@ local function checkForTarget()
         checkForTarget()
     end
 end
-
-
-
-local function unequipTools()
-    if currentTool and currentTool.Parent == localPlayer.Character then
-        local humanoid = localPlayer.Character:FindFirstChildOfClass("Humanoid")
-        if humanoid then
-            humanoid:UnequipTools()
-        end
-        currentTool.Parent = localPlayer.Backpack
-        currentTool = nil
-    end
-end
-
-local function equipAvailableTool()
-    -- Check equipped tools first
-    local character = LocalPlayer.Character
-    if character then
-        for _, tool in ipairs(character:GetChildren()) do
-            if table.find(VALID_TOOLS, tool.Name) and tool:GetAttribute("Ready") then
-                currentTool = tool
-                return true
-            end
-        end
-    end
-end
-        -- Target finding with validation
-        local function findValidTarget()
-            if not HealOthers.Enabled then return nil end
-            
-            if SelfHeal.Enabled then
-                local humanoid = LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
-                if humanoid and humanoid.Health < humanoid.MaxHealth then
-                    return LocalPlayer
-                end
-            end
-        
-            local myRoot = LocalPlayer.Character.HumanoidRootPart
-            local closest = {player = nil, distance = math.huge}
-        
-            for _, player in ipairs(Players:GetPlayers()) do
-                if player == LocalPlayer then continue end
-                local targetChar = player.Character
-                if targetChar then
-                    local targetRoot = targetChar.HumanoidRootPart
-                    local humanoid = targetChar:FindFirstChildOfClass("Humanoid")
-                    
-                    if targetRoot and humanoid and humanoid.Health < humanoid.MaxHealth then
-                        local distance = (myRoot.Position - targetRoot.Position).Magnitude
-                        if distance <= 10 and distance < closest.distance then
-                            closest = {player = player, distance = distance}
-                        end
-                    end
-                end
-            end
-            
-            return closest.player
-        end
 
 spin = vape.Categories.Combat:CreateModule({
     Name = 'Spin',
@@ -232,61 +166,4 @@ Angle = Killaura:CreateSlider({
     Max = 360,
     Default = 360
 })
-HealAura = vape.Categories.Blatant:CreateModule({
-    Name = 'HealAura',
-    Function = function(callback)
-if callback then
-    while HealAura.Enabled do
-            if Backpack then
-                for _, tool in ipairs(Backpack:GetChildren()) do
-                    if table.find(VALID_TOOLS, tool.Name) and tool:GetAttribute("Ready") then
-                        local humanoid = character:FindFirstChildOfClass("Humanoid")
-                        if humanoid then
-                            humanoid:EquipTool(tool)
-                            currentTool = tool
-                            return true
-                        end
-                    end
-                end
-            end
-            
-            unequipTools()
-            return false
-        end
-        
 
-        
-        -- Main control system
-
-
-            local target = findValidTarget()
-            if target then
-                if equipAvailableTool() then
-                    healRemote:FireServer(target)
-                    print(`Healed {target.Name} with {currentTool.Name}`)
-                    unequipTools()
-                end
-            else
-                unequipTools()
-            end
-        end
-
-    end,
-    Tooltip = 'Heals yourself or players around you.'
-})
-
-SelfHeal = HealAura:CreateToggle({
-    Name = 'Heal yourself.',
-    Function = function(callback)
---equipAvailableTool() steht der check
-    end,
-    Tooltip = 'Heals yourself.'
-})
-
-HealOthers = HealAura:CreateToggle({
-    Name = 'Heal others.',
-    Function = function(callback)
-        print(callback, 'toggle enabled!')
-    end,
-    Tooltip = 'Heal other players.'
-})

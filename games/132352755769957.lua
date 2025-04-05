@@ -23,18 +23,17 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local LocalPlayer = Players.LocalPlayer
 local HitmanShared = require(ReplicatedStorage.Features.Hitman.HitmanShared)
 local spin
-local username
-local TARGET_USERNAME
-
-
+local TARGET_USERNAME = nil
+local originalPosition = nil
 
 spin = vape.Categories.Combat:CreateModule({
     Name = 'Spin',
     Function = function(callback)
-        
         if callback then
-            -- Set the username of the player you want to target here
-            local TARGET_USERNAME = "SwiftUser_com" -- Change this
+            -- Store original position before starting
+            if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                originalPosition = LocalPlayer.Character.HumanoidRootPart.CFrame
+            end
             
             local function checkForTarget()
                 if not spin.Enabled then return end
@@ -44,21 +43,22 @@ spin = vape.Categories.Combat:CreateModule({
                 
                 -- Find new target
                 HitmanShared.findNewTarget()
+                task.wait(0.5) -- Small delay to allow target to update
 
                 local target = HitmanShared.getCurrentTarget()
                 if target then
                     if string.lower(target.player.Name) == string.lower(TARGET_USERNAME) then
                         print("\n🎯 Successfully found target:", target.player.Name)
-						spin:Toggle()
+                        end
+                        
+                        spin:Toggle() -- Disable the module after successful find
                     else
                         print("Found wrong target:", target.player.Name)
-
-                        checkForTarget() -- Recursively keep searching
+                        checkForTarget() -- Keep searching
                     end
                 else
                     print("No target found, retrying...")
-
-                    checkForTarget() -- Recursively keep searching
+                    checkForTarget() -- Keep searching
                 end
             end
             
@@ -66,16 +66,21 @@ spin = vape.Categories.Combat:CreateModule({
             checkForTarget()
         else
             print("Spin disabled")
+			if originalPosition then
+				LocalPlayer.Character.HumanoidRootPart.CFrame = originalPosition
+			end
             -- Clean up when disabled if needed
         end
     end,
-    Tooltip = 'Automatically finds and locks onto specified target.'
+    Tooltip = 'Finds target and teleports to them temporarily'
 })
 
-textbox = spin:CreateTextBox({
+-- Textbox to set target username
+local textbox = spin:CreateTextBox({
     Name = 'Set Target',
     Function = function(enter)
-		TARGET_USERNAME = textbox.Value
+        TARGET_USERNAME = textbox.Value
+        print("Target set to:", TARGET_USERNAME)
     end,
     Placeholder = 'Enter target username',
     Tooltip = 'Enter the username of the target you want to find.'

@@ -18,14 +18,111 @@ local function downloadFile(path, func)
 end
 
 
+local function startHitmanTargetSkipper(config)
+	local Players = game:GetService("Players")
+	local ReplicatedStorage = game:GetService("ReplicatedStorage")
+		local LocalPlayer = Players.LocalPlayer
+		
+		-- Default settings
+		local TARGET_FILTER = {
+			SkipIfLevelBelow = config.SkipIfLevelBelow or 0,
+			SkipIfInTeam = config.SkipIfInTeam or false,
+			DesiredPlayer = config.DesiredPlayer or nil,
+			MaxSkips = config.MaxSkips or 200
+		}
+	
+		-- Find Hitman Remote
+		local HitmanRemote = ReplicatedStorage:WaitForChild("Features"):WaitForChild("Hitman"):WaitForChild("CurrentTarget")
+		local HitmanShared = require(ReplicatedStorage.Features.Hitman.HitmanShared)
+	
+		local function getCurrentTarget()
+			local target = HitmanShared.getCurrentTarget()
+			if target then
+				return {
+					player = target.player,
+					level = target.level,
+					credits = target.credits,
+					exp = target.exp
+				}
+			end
+			return nil
+		end
+	
+		-- Auto-Skip Bad Targets
+		local function shouldSkipTarget(target)
+			if not target then return false end
+			
+			-- Skip if in our team
+			if TARGET_FILTER.SkipIfInTeam and target.player.Team == LocalPlayer.Team then
+				return true, "Same Team (" .. target.player.Name .. ")"
+			end
+			
+			-- Skip if level too low
+			if TARGET_FILTER.SkipIfLevelBelow > 0 and target.level < TARGET_FILTER.SkipIfLevelBelow then
+				return true, "Low Level (" .. target.player.Name .. " | Lv. " .. target.level .. ")"
+			end
+			
+			-- Skip if not desired player
+			if TARGET_FILTER.DesiredPlayer and target.player.Name ~= TARGET_FILTER.DesiredPlayer then
+				return true, "Not Desired Player (" .. target.player.Name .. ")"
+			end
+			
+			return false
+		end
+	
+		-- Main Loop
+		task.spawn(function()
+			local skips = 0
+			while skips < TARGET_FILTER.MaxSkips do
+				-- Wait for a new target
+				local target = getCurrentTarget()
+	
+				-- First check if target exists and has a player
+				if not target or not target.player then
+					vape:CreateNotification("⚠️ No target available, waiting...")
+					skips = skips + 1
+					HitmanShared.removeTarget()
+					HitmanShared.findNewTarget()
+					continue
+				end
+	
+				-- Check if we should skip
+				local skip, reason = shouldSkipTarget(target)
+				if skip then
+					skips = skips + 1
+					vape:CreateNotification("⏩ Skipping Target: " .. reason)
+					
+					HitmanShared.removeTarget()
+					HitmanShared.findNewTarget()
+				else
+					-- Safe to access player.Name since we checked above
+					vape:CreateNotification("✅ Accepted Target: " .. target.player.Name .. " (Lv. " .. target.level .. ")")
+					break
+				end
+			end
+			
+			if skips >= TARGET_FILTER.MaxSkips then
+				vape:CreateNotification("❌ Stopped: Reached max skips (" .. TARGET_FILTER.MaxSkips .. ")")
+			end
+		end)
+	end
+	
+	
+
+
+	local vape = shared.vape
 
 	local SilentAim
 	SilentAim = vape.Categories.Combat:CreateModule({
 		Name = 'SilentAim',
 		Function = function(callback)
-print("a")
+			startHitmanTargetSkipper({
+				SkipIfLevelBelow = 0,      -- Skip targets below this level (0 = disabled)
+				SkipIfInTeam = false,      -- Skip teammates
+				DesiredPlayer = "134rr3g", -- Force this player (set to "Username" or nil)
+				MaxSkips = 200             -- Max skips before stopping
+			})
 		end,
 		ExtraText = function() return 'Test' end,
 		Tooltip = 'This is a test module.'
 	})
-	

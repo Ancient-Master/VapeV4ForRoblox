@@ -127,4 +127,3 @@ textbox = HitmanModule:CreateTextBox({
     Placeholder = 'anim (num only)',
     Tooltip = 'This is a test textbox.'
 })
-textbox:SetValue(nil)

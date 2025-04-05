@@ -16,7 +16,9 @@ local function downloadFile(path, func)
     end
     return (func or readfile)(path)
 end
-
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local LocalPlayer = Players.LocalPlayer
 local vape = shared.vape
 local HitmanModule
 local Hitmantextbox
@@ -26,9 +28,7 @@ local originalPosition = nil
 
 local function startHitmanTargetSkipper(config)
 
-    local Players = game:GetService("Players")
-    local ReplicatedStorage = game:GetService("ReplicatedStorage")
-    local LocalPlayer = Players.LocalPlayer
+
 
     -- Default settings
     local TARGET_FILTER = {

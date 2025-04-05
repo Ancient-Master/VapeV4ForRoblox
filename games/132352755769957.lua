@@ -24,7 +24,7 @@ local function startHitmanTargetSkipper(config)
     local Players = game:GetService("Players")
     local ReplicatedStorage = game:GetService("ReplicatedStorage")
     local LocalPlayer = Players.LocalPlayer
-	local pos = LocalPlayer.Character.CFrame and LocalPlayer.Character:FindFirstChild("HumanoidRootPart").CFrame or LocalPlayer.CharacterAdded:Wait():WaitForChild("HumanoidRootPart").CFrame
+	local pos = LocalPlayer.Character:FindFirstChild("HumanoidRootPart").CFrame or LocalPlayer.CharacterAdded:Wait():WaitForChild("HumanoidRootPart").CFrame
     
     -- Default settings
     local TARGET_FILTER = {

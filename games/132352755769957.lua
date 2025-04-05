@@ -95,20 +95,11 @@ test = vape.Categories.Combat:CreateModule({
     Function = function(callback)
 		local ent = entitylib.EntityMouse({
 			Part = 'RootPart',
-			Range = 100,
 			Players = true,
-			NPCs = false,
-			Wallcheck = false,
+			Wallcheck = true,
 			Sort = function(a, b) return a.Magnitude < b.Magnitude end
 		})
-		print(ent, 'entity near mouse')
-		
-		for _, ent in entitylib.List do
-			if ent.Targetable then
-				print(ent.Player, 'targetable entity player in list', ent.  Targetable, ent.Character, ent.RootPart, ent.Head, ent.HipHeight)
-			end
-		end
-		
+
 		if entitylib.isAlive then
 			print(entitylib.character.RootPart, 'local root from entity')
 		end

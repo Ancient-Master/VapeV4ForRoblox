@@ -23,19 +23,18 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local LocalPlayer = Players.LocalPlayer
 local HitmanShared = require(ReplicatedStorage.Features.Hitman.HitmanShared)
 local spin
-local textbox
-local TARGET_USERNAME = "SwiftUser_com" -- Default target
-local originalPosition = nil
+local username
+local TARGET_USERNAME
+
+
 
 spin = vape.Categories.Combat:CreateModule({
     Name = 'Spin',
     Function = function(callback)
+        
         if callback then
-            -- Store original position before starting
-            if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-                originalPosition = LocalPlayer.Character.HumanoidRootPart.CFrame
-            end
-            
+
+			
             local function checkForTarget()
                 if not spin.Enabled then return end
                 
@@ -49,16 +48,16 @@ spin = vape.Categories.Combat:CreateModule({
                 if target then
                     if string.lower(target.player.Name) == string.lower(TARGET_USERNAME) then
                         print("\n🎯 Successfully found target:", target.player.Name)
-                        end
-                        
-                        spin:Toggle() -- Disable the module after successful find
+						spin:Toggle()
                     else
                         print("Found wrong target:", target.player.Name)
-                        checkForTarget() -- Keep searching
+
+                        checkForTarget() -- Recursively keep searching
                     end
                 else
                     print("No target found, retrying...")
-                    checkForTarget() -- Keep searching
+
+                    checkForTarget() -- Recursively keep searching
                 end
             end
             
@@ -66,21 +65,16 @@ spin = vape.Categories.Combat:CreateModule({
             checkForTarget()
         else
             print("Spin disabled")
-			if originalPosition then
-				LocalPlayer.Character.HumanoidRootPart.CFrame = originalPosition
-			end
             -- Clean up when disabled if needed
         end
     end,
-    Tooltip = 'Finds target and teleports to them temporarily'
+    Tooltip = 'Automatically finds and locks onto specified target.'
 })
 
--- Textbox to set target username
-textbox = spin:CreateTextBox({
+username = spin:CreateTextBox({
     Name = 'Set Target',
     Function = function(enter)
-        TARGET_USERNAME = textbox.Value
-        print("Target set to:", TARGET_USERNAME)
+		TARGET_USERNAME = username.Value
     end,
     Placeholder = 'Enter target username',
     Tooltip = 'Enter the username of the target you want to find.'

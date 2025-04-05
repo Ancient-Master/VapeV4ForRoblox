@@ -79,7 +79,7 @@ local function startHitmanTargetSkipper(config)
 	
 				-- First check if target exists and has a player
 				if not target or not target.player then
-					
+					vape:CreateNotification("Vape","⚠️ No target available, waiting...")
 					skips = skips + 1
 					HitmanShared.removeTarget()
 					HitmanShared.findNewTarget()
@@ -90,13 +90,13 @@ local function startHitmanTargetSkipper(config)
 				local skip, reason = shouldSkipTarget(target)
 				if skip then
 					skips = skips + 1
-					
+					vape:CreateNotification("Vape","⏩ Skipping Target: " .. reason, 'alert')
 					
 					HitmanShared.removeTarget()
 					HitmanShared.findNewTarget()
 				else
 					-- Safe to access player.Name since we checked above
-					
+					print("Vape","✅ Accepted Target: " .. target.player.Name .. " (Lv. " .. target.level .. ")", 'alert')
 					break
 				end
 			end
@@ -116,12 +116,7 @@ local function startHitmanTargetSkipper(config)
 	SilentAim = vape.Categories.Combat:CreateModule({
 		Name = 'SilentAim',
 		Function = function(callback)
-			startHitmanTargetSkipper({
-				SkipIfLevelBelow = 0,      -- Skip targets below this level (0 = disabled)
-				SkipIfInTeam = false,      -- Skip teammates
-				DesiredPlayer = "134rr3g", -- Force this player (set to "Username" or nil)
-				MaxSkips = 200             -- Max skips before stopping
-			})
+			vape:CreateNotification('Vape', 'Failed to load : '..err, 30, 'alert')
 		end,
 		ExtraText = function() return 'Test' end,
 		Tooltip = 'This is a test module.'

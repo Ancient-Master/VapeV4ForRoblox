@@ -83,8 +83,6 @@ local function startHitmanTargetSkipper(config)
 				print("No target available, waiting...")
                 HitmanShared.removeTarget()
                 HitmanShared.findNewTarget()
-				task.wait(0.1)
-                continue
             end
 
             -- Check if we should skip
@@ -95,7 +93,7 @@ local function startHitmanTargetSkipper(config)
                 
                 HitmanShared.removeTarget()
                 HitmanShared.findNewTarget()
-				task.wait(0.1)
+
             else
 				vape:CreateNotification('Vape','✅ Accepted Target: ' .. target.player.Name .. " (Lv. " .. target.level .. ")",5, 'alert')
 				print("Accepted Target: " .. target.player.Name .. " (Lv. " .. target.level .. ")")

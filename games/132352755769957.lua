@@ -75,7 +75,7 @@ local function startHitmanTargetSkipper(config)
     
     activeCoroutine = coroutine.create(function()
         while HitmanTargetEnabled do
-            task.wait(1)
+
             if not LocalPlayer.Character or not LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
                 continue
             end

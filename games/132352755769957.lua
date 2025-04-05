@@ -95,14 +95,33 @@ notp = spin:CreateToggle({
 test = vape.Categories.Combat:CreateModule({
     Name = 'test',
     Function = function(callback)
+		if callback then
+			repeat
+				local plrs = entitylib.AllPosition({
+					Range = AttackRange.Value,
+					Wallcheck = Targets.Walls.Enabled or nil,
+					Part = 'RootPart',
+					Players = Targets.Players.Enabled,
+				})
 
+				task.wait()
+			until not test.Enabled
     end,
     Tooltip = 'test module'
 })
-
+AttackRange = test:CreateSlider({
+	Name = 'Attack range',
+	Min = 1,
+	Max = 8,
+	Default = 8,
+	Suffix = function(val) 
+		return val == 1 and 'stud' or 'studs' 
+	end
+})
 Targets = test:CreateTargets({
+	Players = true,
     Function = function()
-        print('target check changed', Targets.Players.Enabled)
+
     end,
-    Tooltip = 'This is a test target list.'
+    Tooltip = 'Select targets to track.'
 })

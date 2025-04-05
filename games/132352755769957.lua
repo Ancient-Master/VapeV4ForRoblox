@@ -19,12 +19,6 @@ end
 
 local vape = shared.vape
 
--- Store settings in a table
-local HitmanSettings = {
-    TargetPlayer = nil,
-    Active = false
-}
-
 local function startHitmanTargetSkipper(config)
     local Players = game:GetService("Players")
     local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -33,8 +27,7 @@ local function startHitmanTargetSkipper(config)
     -- Default settings
     local TARGET_FILTER = {
         SkipIfLevelBelow = config.SkipIfLevelBelow or 0,
-        DesiredPlayer = HitmanSettings.TargetPlayer, -- Use the stored value
-        MaxSkips = config.MaxSkips or 200
+        DesiredPlayer = config.DesiredPlayer or nil
     }
 
     -- Find Hitman Remote
@@ -63,8 +56,8 @@ local function startHitmanTargetSkipper(config)
             return true, "Low Level (" .. target.player.Name .. " | Lv. " .. target.level .. ")"
         end
         
-        -- Skip if not desired player (only if we have a desired player set)
-        if HitmanSettings.TargetPlayer and target.player.Name ~= HitmanSettings.TargetPlayer then
+        -- Skip if not desired player
+        if TARGET_FILTER.DesiredPlayer and target.player.Name ~= TARGET_FILTER.DesiredPlayer then
             return true, "Not Desired Player (" .. target.player.Name .. ")"
         end
         
@@ -73,17 +66,13 @@ local function startHitmanTargetSkipper(config)
 
     -- Main Loop
     task.spawn(function()
-        local skips = 0
-        HitmanSettings.Active = true
-        
-        while HitmanSettings.Active and skips < TARGET_FILTER.MaxSkips do
+        while true do
             -- Wait for a new target
             local target = getCurrentTarget()
 
             -- First check if target exists and has a player
             if not target or not target.player then
-                vape:CreateNotification('Vape',"⚠️ No target available, waiting...",3, 'alert')
-                skips = skips + 1
+                vape:CreateNotification('Vape',"⚠️ No target available, waiting...",5, 'alert')
                 HitmanShared.removeTarget()
                 HitmanShared.findNewTarget()
                 continue
@@ -92,23 +81,16 @@ local function startHitmanTargetSkipper(config)
             -- Check if we should skip
             local skip, reason = shouldSkipTarget(target)
             if skip then
-                skips = skips + 1
-                vape:CreateNotification('Vape','⏩ Skipping Target: ' .. reason,3, 'alert')
+                vape:CreateNotification('Vape','⏩ Skipping Target: ' .. reason,5, 'alert')
                 
                 HitmanShared.removeTarget()
                 HitmanShared.findNewTarget()
             else
                 -- Safe to access player.Name since we checked above
-                vape:CreateNotification('Vape','✅ Accepted Target: ' .. target.player.Name .. " (Lv. " .. target.level .. ")",3)
+                vape:CreateNotification('Vape','✅ Accepted Target: ' .. target.player.Name .. " (Lv. " .. target.level .. ")",5, 'alert')
                 break
             end
         end
-        
-        if skips >= TARGET_FILTER.MaxSkips then
-            vape:CreateNotification('Vape',"❌ Stopped: Reached max skips (" .. TARGET_FILTER.MaxSkips .. ")",3, 'alert')
-        end
-        
-        HitmanSettings.Active = false
     end)
 end
 
@@ -116,17 +98,12 @@ local HitmanModule = vape.Categories.Combat:CreateModule({
     Name = 'Hitman Target Set',
     Function = function(callback)
         if callback then
-            if HitmanSettings.TargetPlayer and HitmanSettings.TargetPlayer ~= "" then
-                startHitmanTargetSkipper({
-                    SkipIfLevelBelow = 0,
-                    MaxSkips = 200
-                })
-            else
-                vape:CreateNotification('Vape', "Please enter a target player name first!", 5, 'alert')
-                HitmanModule.ToggleButton(false) -- Turn the toggle back off
-            end
+            startHitmanTargetSkipper({
+                SkipIfLevelBelow = 0,
+                DesiredPlayer = getgenv().HitmanTarget
+            })
         else
-            HitmanSettings.Active = false -- Stop the search when toggled off
+            -- Add disable functionality here if needed
             vape:CreateNotification('Vape', "Hitman Target Skipper disabled", 5)
         end
     end,
@@ -136,10 +113,7 @@ local HitmanModule = vape.Categories.Combat:CreateModule({
 local HitmanModuleTextbox = HitmanModule:CreateTextBox({
     Name = 'Target Player',
     Function = function(enter)
-        HitmanSettings.TargetPlayer = enter -- Store the value
-        if enter and enter ~= "" then
-            vape:CreateNotification('Vape', "Target set to: "..enter, 3)
-        end
+        getgenv().HitmanTarget = enter
     end,
     Placeholder = 'Player Name',
     Tooltip = 'Enter the name of the player you want as your target.'

@@ -60,7 +60,7 @@ local function checkForTarget()
         if string.lower(target.player.Name) == string.lower(TARGET_USERNAME) then
             notif('Vape', "Successfully found target: " .. target.player.Name, 5)
 
-            if killa then
+            if killa.Enabled then
                 repeat
                     LocalPlayer.Character.HumanoidRootPart.CFrame = target.player.Character.HumanoidRootPart.CFrame
                     

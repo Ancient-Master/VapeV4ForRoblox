@@ -66,12 +66,10 @@ spin = vape.Categories.Combat:CreateModule({
                         isRunning = false
                     else
                         print("Found wrong target:", target.player.Name)
-                        task.wait(0.5) -- Add delay to prevent rapid recursion
                         checkForTarget() -- Recursively keep searching
                     end
                 else
                     print("No target found, retrying...")
-                    task.wait(0.5) -- Add delay to prevent rapid recursion
                     checkForTarget() -- Recursively keep searching
                 end
             end

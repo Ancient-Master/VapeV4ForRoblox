@@ -44,6 +44,9 @@ local Angle
 local AttackRange
 local Max
 local Killaura
+local function notif(...)
+	return vape:CreateNotification(...)
+end
 
 local function checkForTarget()
 	if not spin.Enabled then return end
@@ -54,15 +57,15 @@ local function checkForTarget()
 	local target = HitmanShared.getCurrentTarget()
 	if target then
 		if string.lower(target.player.Name) == string.lower(TARGET_USERNAME) then
-			vape:CreateNotification('Vape',"Successfully found target:", target.player.Name,5)
+			vnotif('Vape',"Successfully found target:", target.player.Name,5)
 			spin:Toggle()
 		else
-			vape:CreateNotification('Vape',"Found wrong target:", target.player.Name,1,'warning')
+			notif('Vape',"Found wrong target:", target.player.Name,1,'warning')
 
 			checkForTarget()
 		end
 	else
-		vape:CreateNotification('Vape',"No target found, retrying...",1,'warning')
+		notif('Vape',"No target found, retrying...",1,'warning')
 
 		checkForTarget()
 	end

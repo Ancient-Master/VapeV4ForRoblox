@@ -126,7 +126,9 @@ Killaura = vape.Categories.Combat:CreateModule({
                         local delta = (v.RootPart.Position - entitylib.character.RootPart.Position)
                         local angle = math.acos(localfacing:Dot((delta * Vector3.new(1, 0, 1)).Unit))
                         if angle > (math.rad(Angle.Value) / 2) then continue end
-                        --if not Swing.Enabled then
+						if entitylib.isAlive then 
+						if not entitylib.isVulnerable then
+							                        --if not Swing.Enabled then
                         --    skywars.MeleeController:playAnimation(lplr.Character, tool)
                         --end
 						for i = 1, 3 do
@@ -139,7 +141,8 @@ Killaura = vape.Categories.Combat:CreateModule({
                         Namespaces.MeleeReplication.packets.sendHit.send(args)
 						end)()
 					end
-                    end
+				end
+                end
                 end
                 task.wait()
             until not Killaura.Enabled

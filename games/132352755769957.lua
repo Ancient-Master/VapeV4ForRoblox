@@ -83,6 +83,7 @@ local function startHitmanTargetSkipper(config)
 				print("No target available, waiting...")
                 HitmanShared.removeTarget()
                 HitmanShared.findNewTarget()
+				continue
             end
 
             -- Check if we should skip

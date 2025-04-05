@@ -43,13 +43,13 @@ local function checkForTarget()
 	HitmanShared.removeTarget()
 	HitmanShared.findNewTarget()
 
-	local target = HitmanShared.getCurrentTarget()
-	if target then
-		if string.lower(target.player.Name) == string.lower(TARGET_USERNAME) then
-			vape:CreateNotification('Vape',"Successfully found target:", target.player.Name,5)
+	local a = HitmanShared.getCurrentTarget()
+	if a then
+		if string.lower(a.player.Name) == string.lower(TARGET_USERNAME) then
+			vape:CreateNotification('Vape',"Successfully found target:", a.player.Name,5)
 			spin:Toggle()
 		else
-			vape:CreateNotification('Vape',"Found wrong target:", target.player.Name,1,'warning')
+			vape:CreateNotification('Vape',"Found wrong target:", a.player.Name,1,'warning')
 
 			checkForTarget()
 		end
@@ -63,10 +63,7 @@ end
 spin = vape.Categories.Combat:CreateModule({
     Name = 'Spin',
     Function = function(callback)
-
-
 		if callback then
-
 			if not notp.Enabled then
 				originalPosition = LocalPlayer.Character.HumanoidRootPart.CFrame
 				LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(125.482315, 254.5, -749.594482, -0.00281787151, 1.3361479e-07, 0.999996006, 1.39850187e-10, 1, -1.33614932e-07, -0.999996006, -2.3666008e-10, -0.00281787151)

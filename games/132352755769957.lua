@@ -73,7 +73,6 @@ local function checkForTarget()
                             }
                             Namespaces.MeleeReplication.packets.sendHit.send(args)
                         end)()
-                        task.wait()
                     end
                     
                     task.wait()

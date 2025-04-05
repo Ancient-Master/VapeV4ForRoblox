@@ -18,6 +18,8 @@ local function downloadFile(path, func)
 end
 
 local vape = shared.vape
+local HitmanTargetEnabled = false
+local HitmanTargetPlayer = nil
 
 local function startHitmanTargetSkipper(config)
     local Players = game:GetService("Players")
@@ -66,7 +68,7 @@ local function startHitmanTargetSkipper(config)
 
     -- Main Loop
     task.spawn(function()
-        while getgenv().HitmanTarget do
+        while HitmanTargetEnabled do
             -- Wait for a new target
             local target = getCurrentTarget()
 
@@ -112,7 +114,7 @@ local HitmanModule = vape.Categories.Combat:CreateModule({
 local HitmanModuleTextbox = HitmanModule:CreateTextBox({
     Name = 'Target Player',
     Function = function(text)
-        HitmanTargetPlayer = tostring(text)
+        HitmanTargetPlayer = HitmanModuleTextbox.Value
         vape:CreateNotification('Vape', "Target set to: " .. (HitmanTargetPlayer or "None"), 3)
     end,
     Placeholder = 'Player Name',

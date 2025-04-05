@@ -27,7 +27,6 @@ local function startHitmanTargetSkipper(config)
 		-- Default settings
 		local TARGET_FILTER = {
 			SkipIfLevelBelow = config.SkipIfLevelBelow or 0,
-			SkipIfInTeam = config.SkipIfInTeam or false,
 			DesiredPlayer = config.DesiredPlayer or nil,
 			MaxSkips = config.MaxSkips or 200
 		}
@@ -52,11 +51,6 @@ local function startHitmanTargetSkipper(config)
 		-- Auto-Skip Bad Targets
 		local function shouldSkipTarget(target)
 			if not target then return false end
-			
-			-- Skip if in our team
-			if TARGET_FILTER.SkipIfInTeam and target.player.Team == LocalPlayer.Team then
-				return true, "Same Team (" .. target.player.Name .. ")"
-			end
 			
 			-- Skip if level too low
 			if TARGET_FILTER.SkipIfLevelBelow > 0 and target.level < TARGET_FILTER.SkipIfLevelBelow then
@@ -109,13 +103,12 @@ local function startHitmanTargetSkipper(config)
 	end
 	
 	local HitmanModule = vape.Categories.Combat:CreateModule({
-		Name = 'Hitman Target Skipper',  -- Correct name matching the functionality
+		Name = 'Hitman Target Set',
 		Function = function(callback)
 			if callback then
 				startHitmanTargetSkipper({
 					SkipIfLevelBelow = 0,
-					SkipIfInTeam = false,
-					DesiredPlayer = nil,
+					DesiredPlayer = enter,
 					MaxSkips = 200
 				})
 			else
@@ -125,3 +118,13 @@ local function startHitmanTargetSkipper(config)
 		end,
 		Tooltip = 'Automatically skips unwanted hitman targets'
 	})
+	local textbox
+textbox = HitmanModule:CreateTextBox({
+    Name = 'Animation',
+    Function = function(enter)
+        print(textbox.Value, enter, 'textbox value set')
+    end,
+    Placeholder = 'anim (num only)',
+    Tooltip = 'This is a test textbox.'
+})
+textbox:SetValue(nil)

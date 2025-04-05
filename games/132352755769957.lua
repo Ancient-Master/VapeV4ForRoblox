@@ -56,37 +56,49 @@ local function checkForTarget()
     HitmanShared.findNewTarget()
 
     local target = HitmanShared.getCurrentTarget()
-    if target then
-        if string.lower(target.player.Name) == string.lower(TARGET_USERNAME) then
-            notif('Vape', "Successfully found target: " .. target.player.Name, 5)
-
-            if killa then
-                repeat
-                    LocalPlayer.Character.HumanoidRootPart.CFrame = target.player.Character.HumanoidRootPart.CFrame
-                    
-                    for i = 1, 3 do
-                        coroutine.wrap(function()
-                            local args = {
-                                target.Player.Character.Humanoid,
-                                target.Player.Character.Head,
-                                LocalPlayer.Character:FindFirstChildOfClass("Tool") or nil
-                            }
-                            Namespaces.MeleeReplication.packets.sendHit.send(args)
-                        end)()
-                    end
-                    
-                    task.wait()
-                until not killa.Enabled
-            end
-            spin:Toggle()
-        else
-            notif('Vape', "Found wrong target: " .. target.player.Name, 3, 'warning')
-            checkForTarget()
-        end
-    else
+    if not target then
         notif('Vape', "No target found, retrying...", 1, 'warning')
-        checkForTarget()
+        task.wait(1)
+        return checkForTarget()
     end
+
+    if string.lower(target.player.Name) ~= string.lower(TARGET_USERNAME) then
+        notif('Vape', "Found wrong target: " .. target.player.Name, 3, 'warning')
+        task.wait(1)
+        return checkForTarget()
+    end
+
+    notif('Vape', "Successfully found target: " .. target.player.Name, 5)
+
+    if not killa then return end
+    
+    -- Main combat loop
+    while killa.Enabled and 
+          target and target.Player and target.Player.Character and 
+          LocalPlayer.Character and 
+          LocalPlayer.Character.Humanoid.Health > 0 and
+          target.Player.Character.Humanoid.Health > 0 do
+        
+        -- Continuous teleportation
+        LocalPlayer.Character.HumanoidRootPart.CFrame = target.player.Character.HumanoidRootPart.CFrame * CFrame.new(0, 0, -2)
+        
+        -- Attack 3 times quickly
+        for i = 1, 3 do
+            coroutine.wrap(function()
+                local args = {
+                    target.Player.Character.Humanoid,
+                    target.Player.Character.Head,
+                    LocalPlayer.Character:FindFirstChildOfClass("Tool") or nil
+                }
+                Namespaces.MeleeReplication.packets.sendHit.send(args)
+            end)()
+            task.wait(0.1) -- Small delay between attacks
+        end
+        
+        task.wait(0.2) -- Brief pause between attack cycles
+    end
+
+    spin:Toggle()
 end
 spin = vape.Categories.Combat:CreateModule({
     Name = 'Spin',

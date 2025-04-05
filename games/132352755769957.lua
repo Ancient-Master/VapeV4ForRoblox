@@ -60,10 +60,11 @@ spin = vape.Categories.Combat:CreateModule({
     Name = 'Spin',
     Function = function(callback)
 		if LocalPlayer.Team ~= "PATIENT" then
-			vape:CreateNotification('Vape',"You are not in the Patient team!", 5, 'warning')
 			spin:Toggle()
+			vape:CreateNotification('Vape',"You are not in the Patient team!", 5, 'warning')
 			return
 		end
+		
 		if callback then
 
 			if not notp.Enabled then
@@ -138,5 +139,5 @@ Angle = test:CreateSlider({
 	Name = 'Max angle',
 	Min = 1,
 	Max = 360,
-	Default = 2
+	Default = 360
 })

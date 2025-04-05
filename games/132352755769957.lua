@@ -25,12 +25,10 @@ local HitmanShared = require(ReplicatedStorage.Features.Hitman.HitmanShared)
 local spin
 local username
 local TARGET_USERNAME
-local pos
+local originalPosition
 
 local function checkForTarget()
 	if not spin.Enabled then return end
-	pos = LocalPlayer.Character:FindFirstChild("HumanoidRootPart").CFrame
-	LocalPlayer.Character:FindFirstChild("HumanoidRootPart").CFrame = CFrame.new(125.482315, 254.5, -749.594482, -0.00281787151, 1.3361479e-07, 0.999996006, 1.39850187e-10, 1, -1.33614932e-07, -0.999996006, -2.3666008e-10, -0.00281787151)
 
 	HitmanShared.removeTarget()
 	HitmanShared.findNewTarget()
@@ -39,7 +37,6 @@ local function checkForTarget()
 	if target then
 		if string.lower(target.player.Name) == string.lower(TARGET_USERNAME) then
 			print("\n🎯 Successfully found target:", target.player.Name)
-			LocalPlayer.Character:FindFirstChild("HumanoidRootPart").CFrame = pos
 			spin:Toggle()
 		else
 			print("Found wrong target:", target.player.Name)
@@ -57,11 +54,14 @@ spin = vape.Categories.Combat:CreateModule({
     Name = 'Spin',
     Function = function(callback)
 		if callback then
-
+			originalPosition = LocalPlayer.Character.HumanoidRootPart.CFrame
+            LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(125.482315, 254.5, -749.594482, -0.00281787151, 1.3361479e-07, 0.999996006, 1.39850187e-10, 1, -1.33614932e-07, -0.999996006, -2.3666008e-10, -0.00281787151)
+            
             checkForTarget()
         else
-			LocalPlayer.Character:FindFirstChild("HumanoidRootPart").CFrame = pos
 			            print("Spin disabled")
+						LocalPlayer.Character.HumanoidRootPart.CFrame = originalPosition
+            
         end
      
     end,

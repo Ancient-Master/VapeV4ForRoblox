@@ -97,13 +97,17 @@ local function startHitmanTargetSkipper(config)
             else
 				vape:CreateNotification('Vape','✅ Accepted Target: ' .. target.player.Name .. " (Lv. " .. target.level .. ")",5, 'alert')
 				HitmanModule:Toggle()
+				if originalPosition then
+					LocalPlayer.Character.HumanoidRootPart.CFrame = originalPosition
+					originalPosition = nil
+				end
 				break
             end
         end
     end)
 end
 HitmanModule = vape.Categories.Combat:CreateModule({
-    Name = 'Hitman Target Set',
+    Name = 'Hitman Target Finder',
     Function = function(callback)
         HitmanTargetEnabled = callback
         if callback then
@@ -115,7 +119,8 @@ HitmanModule = vape.Categories.Combat:CreateModule({
 			if originalPosition then
 				LocalPlayer.Character.HumanoidRootPart.CFrame = originalPosition
 			end
-            vape:CreateNotification('Vape', "Hitman Target Skipper disabled", 5)
+			originalPosition = nil
+            vape:CreateNotification('Vape', "Hitman Target Finder disabled", 5)
         end
     end,
     Tooltip = 'Automatically skips unwanted hitman targets'

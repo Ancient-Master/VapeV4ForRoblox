@@ -171,6 +171,7 @@ Killaura = vape.Categories.Combat:CreateModule({
 		for i, v in Particles do
 			v.Parent = nil
             task.wait(0.05)
+		end
     end
 end,
     Tooltip = 'test module'

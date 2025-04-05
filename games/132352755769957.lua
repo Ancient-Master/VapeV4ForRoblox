@@ -130,20 +130,12 @@ Killaura = vape.Categories.Combat:CreateModule({
 						if entitylib.isAlive then            
 							if entitylib.isVulnerable then
 							targetinfo.Targets[v] = tick() + 1
-							if Downed.Enabled then
-								if not LocalPlayer.Character:FindFirstChild("Glass Fragment") then
-									local glassFragment = LocalPlayer.Backpack:FindFirstChild("Glass Fragment")
-									if glassFragment then
-										glassFragment.Parent = LocalPlayer.Character
-									end
-								end
-							end
 						for i = 1, 3 do
 							coroutine.wrap(function()
 							local args = {
                             v.Humanoid,
                             v.Head,
-                            LocalPlayer.Character:FindFirstChild("Glass Fragment")
+                            LocalPlayer.Character:FindFirstChildOfClass("Tool") or nil
                         }
                         Namespaces.MeleeReplication.packets.sendHit.send(args)
 						end)()
@@ -160,7 +152,7 @@ Killaura = vape.Categories.Combat:CreateModule({
 })
 
 Targets = Killaura:CreateTargets({Players = true})
-Downed = Killaura:CreateToggle({Name = 'Equip Weapon If downed'})
+autoequip = Killaura:CreateToggle({Name = 'Equip Weapon'})
 
 AttackRange = Killaura:CreateSlider({
     Name = 'Attack range',

@@ -6188,8 +6188,9 @@ end)
 
 run(function()
     local platformPart = nil -- Store the platform reference
-    local slider, slider2, colorSlider
-
+    local slider, slider2, colorSlider, toggle, fullbrightToggle
+    local originalLighting = {}
+     
     local Platform = vape.Categories.Utility:CreateModule({
         Name = 'Platform in the Sky',
         Function = function(callback)
@@ -6198,13 +6199,18 @@ run(function()
                 if not platformPart or not platformPart.Parent then
                     platformPart = Instance.new('Part')
                     platformPart.Size = Vector3.new(100, 1, 100)
-                    platformPart.Position = Vector3.new(0, slider and slider.Value or 1000, 0) -- Fallback to 1000 if slider not ready
+                    platformPart.Position = Vector3.new(0, slider and slider.Value or 1000) -- Fallback to 1000 if slider not ready
                     platformPart.Anchored = true
                     platformPart.Parent = workspace
                     platformPart.Material = Enum.Material.SmoothPlastic
                     platformPart.Color = colorSlider and colorSlider.Color or Color3.fromRGB(255, 255, 255)
                     platformPart.CanCollide = true
                     platformPart.Name = "VapeSkyPlatform"
+                    
+                    -- Apply fullbright if enabled
+                    if fullbrightToggle and fullbrightToggle.Enabled then
+                        applyFullBright()
+                    end
                 end
             else
                 -- Delete the platform if it exists
@@ -6212,11 +6218,60 @@ run(function()
                     platformPart:Destroy()
                     platformPart = nil
                 end
+                -- Restore original lighting when platform is disabled
+                restoreLighting()
             end
         end,
         Tooltip = 'Creates a platform in the sky'
     })
-    
+
+    -- Function to apply fullbright effect
+    local function applyFullBright()
+        if not game:GetService("Lighting"):FindFirstChild("VapeFullbright") then
+            originalLighting.Ambient = game:GetService("Lighting").Ambient
+            originalLighting.Brightness = game:GetService("Lighting").Brightness
+            originalLighting.OutdoorAmbient = game:GetService("Lighting").OutdoorAmbient
+            
+            local newLight = Instance.new("ColorCorrectionEffect")
+            newLight.Name = "VapeFullbright"
+            newLight.Brightness = 1
+            newLight.Contrast = 1
+            newLight.Saturation = 0
+            newLight.TintColor = Color3.new(1, 1, 1)
+            newLight.Parent = game:GetService("Lighting")
+            
+            game:GetService("Lighting").Ambient = Color3.new(1, 1, 1)
+            game:GetService("Lighting").Brightness = 2
+            game:GetService("Lighting").OutdoorAmbient = Color3.new(1, 1, 1)
+        end
+    end
+
+    -- Function to restore original lighting
+    local function restoreLighting()
+        local vapeLight = game:GetService("Lighting"):FindFirstChild("VapeFullbright")
+        if vapeLight then
+            vapeLight:Destroy()
+        end
+        
+        if originalLighting.Ambient then
+            game:GetService("Lighting").Ambient = originalLighting.Ambient
+            game:GetService("Lighting").Brightness = originalLighting.Brightness
+            game:GetService("Lighting").OutdoorAmbient = originalLighting.OutdoorAmbient
+        end
+    end
+
+    fullbrightToggle = Platform:CreateToggle({
+        Name = 'FullBright',
+        Function = function(callback)
+            if callback then
+                applyFullBright()
+            else
+                restoreLighting()
+            end
+        end,
+        Tooltip = 'Toggles FullBright lighting on the platform'
+    })
+
     slider = Platform:CreateSlider({
         Name = 'Platform Height',
         Min = 0,
@@ -6265,23 +6320,23 @@ run(function()
     })
 end)
 	
-	-- Panic button (unchanged, works fine)
-	run(function()
-		vape.Categories.Utility:CreateModule({
-			Name = 'Panic',
-			Function = function(callback)
-				if callback then
-					for _, v in vape.Modules do
-						if v.Enabled then
-							v:Toggle()
-						end
-					end
-				end
-			end,
-			Tooltip = 'Disables all currently enabled modules'
-		})
-
+-- Panic button (unchanged, works fine)
+run(function()
+    vape.Categories.Utility:CreateModule({
+        Name = 'Panic',
+        Function = function(callback)
+            if callback then
+                for _, v in vape.Modules do
+                    if v.Enabled then
+                        v:Toggle()
+                    end
+                end
+            end
+        end,
+        Tooltip = 'Disables all currently enabled modules'
+    })
 end)
+
 run(function()
 	vape.Categories.Utility:CreateModule({
 		Name = 'Panic',

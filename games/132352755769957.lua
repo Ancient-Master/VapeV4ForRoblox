@@ -107,9 +107,7 @@ Killaura = vape.Categories.Combat:CreateModule({
     Name = 'Killaura',
     Function = function(callback)
         if callback then
-            if Mouse.Enabled then
-                if inputService:IsMouseButtonPressed(0) then return false end
-            end
+
 
             repeat
                 local plrs = entitylib.AllPosition({

@@ -49,7 +49,7 @@ spin = vape.Categories.Combat:CreateModule({
                 if target then
                     if string.lower(target.player.Name) == string.lower(TARGET_USERNAME) then
                         print("\n🎯 Successfully found target:", target.player.Name)
-                        -- You could add your silent aim logic here
+						spin:Toggle()
                     else
                         print("Found wrong target:", target.player.Name)
 

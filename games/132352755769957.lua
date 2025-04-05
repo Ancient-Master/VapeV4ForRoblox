@@ -17,6 +17,7 @@ local function downloadFile(path, func)
 	return (func or readfile)(path)
 end
 
+local vape = shared.vape
 
 local function startHitmanTargetSkipper(config)
 	local Players = game:GetService("Players")
@@ -90,13 +91,13 @@ local function startHitmanTargetSkipper(config)
 				local skip, reason = shouldSkipTarget(target)
 				if skip then
 					skips = skips + 1
-					vape:CreateNotification('Vape',"⏩ Skipping Target: " .. reason,30, 'alert')
+					vape:CreateNotification('Vape','⏩ Skipping Target: ' .. reason,30, 'alert')
 					
 					HitmanShared.removeTarget()
 					HitmanShared.findNewTarget()
 				else
 					-- Safe to access player.Name since we checked above
-					vape:CreateNotification('Vape',"✅ Accepted Target: " .. target.player.Name .. " (Lv. " .. target.level .. ")",30, 'alert')
+					vape:CreateNotification('Vape','✅ Accepted Target: ' .. target.player.Name .. " (Lv. " .. target.level .. ")",30, 'alert')
 					break
 				end
 			end
@@ -107,21 +108,20 @@ local function startHitmanTargetSkipper(config)
 		end)
 	end
 	
-	
-
-
-	local vape = shared.vape
-
-	local SilentAim
-	SilentAim = vape.Categories.Combat:CreateModule({
-		Name = 'SilentAim',
+	local HitmanModule = vape.Categories.Combat:CreateModule({
+		Name = 'Hitman Target Skipper',  -- Correct name matching the functionality
 		Function = function(callback)
-			startHitmanTargetSkipper({
-				SkipIfLevelBelow = 0,      -- Skip targets below this level (0 = disabled)
-				SkipIfInTeam = false,      -- Skip teammates
-				DesiredPlayer = "134rr3g", -- Force this player (set to "Username" or nil)
-				MaxSkips = 200             -- Max skips before stopping
-			})
+			if callback then
+				startHitmanTargetSkipper({
+					SkipIfLevelBelow = 0,
+					SkipIfInTeam = false,
+					DesiredPlayer = nil,
+					MaxSkips = 200
+				})
+			else
+				-- Add disable functionality here if needed
+				vape:CreateNotification('Vape', "Hitman Target Skipper disabled", 5)
+			end
 		end,
-		Tooltip = 'This is a test module.'
+		Tooltip = 'Automatically skips unwanted hitman targets'
 	})

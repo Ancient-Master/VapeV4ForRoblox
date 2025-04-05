@@ -93,7 +93,7 @@ local function startHitmanTargetSkipper(config)
         end
     end)
 end
-
+local HitmanModule
 local HitmanModule = vape.Categories.Combat:CreateModule({
     Name = 'Hitman Target Set',
     Function = function(callback)
@@ -110,7 +110,7 @@ local HitmanModule = vape.Categories.Combat:CreateModule({
     end,
     Tooltip = 'Automatically skips unwanted hitman targets'
 })
-
+local HitmanModuleTextbox
 local HitmanModuleTextbox = HitmanModule:CreateTextBox({
     Name = 'Target Player',
     Function = function(enter)

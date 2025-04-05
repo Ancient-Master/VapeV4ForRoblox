@@ -90,19 +90,19 @@ local function startHitmanTargetSkipper(config)
 				local skip, reason = shouldSkipTarget(target)
 				if skip then
 					skips = skips + 1
-					vape:CreateNotification("Vape","⏩ Skipping Target: " .. reason)
+					vape:CreateNotification("Vape","⏩ Skipping Target: " .. reason, 'alert')
 					
 					HitmanShared.removeTarget()
 					HitmanShared.findNewTarget()
 				else
 					-- Safe to access player.Name since we checked above
-					vape:CreateNotification("Vape","✅ Accepted Target: " .. target.player.Name .. " (Lv. " .. target.level .. ")")
+					vape:CreateNotification("Vape","✅ Accepted Target: " .. target.player.Name .. " (Lv. " .. target.level .. ")", 'alert')
 					break
 				end
 			end
 			
 			if skips >= TARGET_FILTER.MaxSkips then
-				vape:CreateNotification("Vape","❌ Stopped: Reached max skips (" .. TARGET_FILTER.MaxSkips .. ")")
+				vape:CreateNotification("Vape","❌ Stopped: Reached max skips (" .. TARGET_FILTER.MaxSkips .. ")", 'alert')
 			end
 		end)
 	end

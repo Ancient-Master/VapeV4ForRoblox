@@ -35,10 +35,7 @@ local AttackRange
 
 local function checkForTarget()
 	if not spin.Enabled then return end
-	if not LocalPlayer.Team == game.Teams.PATIENT then
-		vape:CreateNotification('Vape',"\n🚫 You are not in the Patient team!", 5, 'warning')
-		return
-	end
+
 	HitmanShared.removeTarget()
 	HitmanShared.findNewTarget()
 
@@ -62,6 +59,10 @@ end
 spin = vape.Categories.Combat:CreateModule({
     Name = 'Spin',
     Function = function(callback)
+		if not LocalPlayer.Team == game.Teams.PATIENT then
+			vape:CreateNotification('Vape',"\n🚫 You are not in the Patient team!", 5, 'warning')
+			return
+		end
 		if callback then
 			if not notp.Enabled then
 				originalPosition = LocalPlayer.Character.HumanoidRootPart.CFrame

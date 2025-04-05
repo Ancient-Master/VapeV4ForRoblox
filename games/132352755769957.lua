@@ -113,7 +113,7 @@ local HitmanModule = vape.Categories.Combat:CreateModule({
 local HitmanModuleTextbox = HitmanModule:CreateTextBox({
     Name = 'Target Player',
     Function = function(text)
-        HitmanTargetPlayer = tostring(text)
+        HitmanTargetPlayer = textbox.Value
         vape:CreateNotification('Vape', "Target set to: " .. (HitmanTargetPlayer or "None"), 3)
     end,
     Placeholder = 'Player Name',

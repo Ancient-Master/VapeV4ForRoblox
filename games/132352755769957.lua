@@ -81,8 +81,6 @@ local function startHitmanTargetSkipper(config)
             if not target or not target.player then
                 vape:CreateNotification('Vape',"⚠️ No target available, waiting...",1, 'alert')
 				print("No target available, waiting...")
-                HitmanShared.removeTarget()
-                HitmanShared.findNewTarget()
 				continue
             end
 

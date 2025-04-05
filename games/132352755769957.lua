@@ -131,7 +131,7 @@ Killaura = vape.Categories.Combat:CreateModule({
 							local args = {
                             v.Humanoid,
                             v.Head,
-                            LocalPlayer.Character:FindFirstChildOfClass("Tool") or LocalPlayer.BackPack:FindFirstChildOfClass("Tool") or nil
+                            LocalPlayer.Character:FindFirstChildOfClass("Tool") or LocalPlayer.Backpack:FindFirstChildOfClass("Tool") or nil
                         }
                         Namespaces.MeleeReplication.packets.sendHit.send(args)
 						end)()

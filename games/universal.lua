@@ -6222,7 +6222,7 @@ local slider = Platform:CreateSlider({
 	end,
 	Decimal = 10
 })
-local slider = Platform:CreateSlider({
+local slider2 = Platform:CreateSlider({
 	Name = 'Platform Size',
 	Min = 0,
 	Max = 1000,

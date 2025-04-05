@@ -6186,19 +6186,19 @@ run(function()
 	})
 end)
 run(function()
-vape.Categories.Utility:CreateModule({
+	local Platform = vape.Categories.Utility:CreateModule({
 	Name = 'Platform in the Sky',
 	Function = function(callback)
 		if callback then
-			local platform = Instance.new('Part')
-			platform.Size = Vector3.new(100, 1, 100)
-			platform.Position = Vector3.new(0, 1000, 0)
-			platform.Anchored = true
-			platform.Parent = workspace
-			platform.Material = Enum.Material.SmoothPlastic
-			platform.Color = Color3.fromRGB(255, 255, 255)
-			platform.CanCollide = false
-			vape.Clean(platform)
+			local platform2 = Instance.new('Part')
+			platform2.Size = Vector3.new(100, 1, 100)
+			platform2.Position = Vector3.new(0, 1000, 0)
+			platform2.Anchored = true
+			platform2.Parent = workspace
+			platform2.Material = Enum.Material.SmoothPlastic
+			platform2.Color = Color3.fromRGB(255, 255, 255)
+			platform2.CanCollide = false
+			vape.Clean(platform2)
 		else
 			for _, v in workspace:GetChildren() do
 				if v:IsA('Part') and v.Size == Vector3.new(100, 1, 100) and v.Position == Vector3.new(0, slider.Value, 0) then
@@ -6209,7 +6209,7 @@ vape.Categories.Utility:CreateModule({
 	end,
 	Tooltip = 'Uninjects the script to prevent bans'
 })
-local slider = vape.Categories.Utility:CreateSlider({
+local slider = Platform:CreateSlider({
 	Name = 'Platform Height',
 	Min = 0,
 	Max = 1000,
@@ -6224,7 +6224,7 @@ local slider = vape.Categories.Utility:CreateSlider({
 	Decimal = 10
 })
 
-slider:CreateButton({
+local teleport = Platform:CreateButton({
 	Name = 'Teleport to Platform',
 	Function = function()
 		if entitylib.isAlive then

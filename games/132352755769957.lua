@@ -25,14 +25,10 @@ local Hitmantextbox
 local HitmanTargetEnabled = false
 local HitmanTargetPlayer = nil
 local originalPosition = nil
-local activeThread = nil -- Track the active loop thread
 
 local function startHitmanTargetSkipper(config)
-    -- Kill any existing loop first
-    if activeThread then
-        task.cancel(activeThread)
-        activeThread = nil
-    end
+
+
 
     -- Default settings
     local TARGET_FILTER = {
@@ -61,10 +57,12 @@ local function startHitmanTargetSkipper(config)
     local function shouldSkipTarget(target)
         if not target then return false end
         
+        -- Skip if level too low
         if TARGET_FILTER.SkipIfLevelBelow > 0 and target.level < TARGET_FILTER.SkipIfLevelBelow then
             return true, "Low Level (" .. target.player.Name .. " | Lv. " .. target.level .. ")"
         end
         
+        -- Skip if not desired player
         if TARGET_FILTER.DesiredPlayer and target.player.Name ~= TARGET_FILTER.DesiredPlayer then
             return true, "Not Desired Player (" .. target.player.Name .. ")"
         end
@@ -73,76 +71,64 @@ local function startHitmanTargetSkipper(config)
     end
 
     -- Main Loop
-    activeThread = task.spawn(function()
+    task.spawn(function()
         while HitmanTargetEnabled do
-            LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(125.482315, 254.5, -749.594482, -0.00281787151, 1.3361479e-07, 0.999996006, 1.39850187e-10, 1, -1.33614932e-07, -0.999996006, -2.3666008e-10, -0.00281787151)
-            
+			wait(1)
+			LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(125.482315, 254.5, -749.594482, -0.00281787151, 1.3361479e-07, 0.999996006, 1.39850187e-10, 1, -1.33614932e-07, -0.999996006, -2.3666008e-10, -0.00281787151)
+            -- Wait for a new target
             local target = getCurrentTarget()
 
+            -- First check if target exists and has a player
             if not target or not target.player then
-                vape:CreateNotification('Vape', "⚠️ No target available, waiting...", 1, 'alert')
+                vape:CreateNotification('Vape',"⚠️ No target available, waiting...",1, 'alert')
 				print("No target available, waiting...")
-                HitmanShared.findNewTarget()
-                continue
+				HitmanShared.findNewTarget()
+				continue
             end
 
+            -- Check if we should skip
             local skip, reason = shouldSkipTarget(target)
             if skip then
-                vape:CreateNotification('Vape', '⏩ Skipping Target: ' .. reason, 1, 'alert')
+                vape:CreateNotification('Vape','⏩ Skipping Target: ' .. reason,1, 'alert')
 				print("Skipping Target: " .. reason)
+                
                 HitmanShared.removeTarget()
                 HitmanShared.findNewTarget()
+
             else
-                vape:CreateNotification('Vape', '✅ Accepted Target: ' .. target.player.Name .. " (Lv. " .. target.level .. ")", 5, 'alert')
+				vape:CreateNotification('Vape','✅ Accepted Target: ' .. target.player.Name .. " (Lv. " .. target.level .. ")",5, 'alert')
 				print("Accepted Target: " .. target.player.Name .. " (Lv. " .. target.level .. ")")
-                HitmanModule:Toggle()
-                LocalPlayer.Character.HumanoidRootPart.CFrame = originalPosition
-                break
+				HitmanModule:Toggle()
+					LocalPlayer.Character.HumanoidRootPart.CFrame = originalPosition
+				break
             end
         end
-        activeThread = nil
     end)
 end
-
 HitmanModule = vape.Categories.Combat:CreateModule({
     Name = 'Hitman Target Finder',
     Function = function(callback)
         HitmanTargetEnabled = callback
         if callback then
-            if not originalPosition and LocalPlayer.Character then
-                originalPosition = LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and LocalPlayer.Character.HumanoidRootPart.CFrame
-            end
+			originalPosition = LocalPlayer.Character:FindFirstChild("HumanoidRootPart").CFrame
             startHitmanTargetSkipper({
                 SkipIfLevelBelow = 0,
                 DesiredPlayer = HitmanTargetPlayer
             })
         else
-            -- Clean up when disabling
-            if activeThread then
-                task.cancel(activeThread)
-                activeThread = nil
-            end
-            if originalPosition and LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-                LocalPlayer.Character.HumanoidRootPart.CFrame = originalPosition
-            end
+			LocalPlayer.Character:FindFirstChild("HumanoidRootPart").CFrame = originalPosition
             vape:CreateNotification('Vape', "Hitman Target Finder disabled", 5)
         end
     end,
     Tooltip = 'Automatically skips unwanted hitman targets'
 })
 
+
 Hitmantextbox = HitmanModule:CreateTextBox({
     Name = 'Target Player',
     Function = function(enter)
-        HitmanTargetPlayer = Hitmantextbox.Value
-        vape:CreateNotification('Vape', tostring(HitmanTargetPlayer), 5)
-        -- Restart the skipper if active
-        if HitmanTargetEnabled then
-            startHitmanTargetSkipper({
-                SkipIfLevelBelow = 0,
-                DesiredPlayer = HitmanTargetPlayer
-            })
-        end
+		HitmanTargetPlayer = Hitmantextbox.Value
+		vape:CreateNotification('Vape',tostring(HitmanTargetPlayer), 5)
     end,
     Placeholder = 'Enter player name',
     Tooltip = 'Enter the player name you want to target',

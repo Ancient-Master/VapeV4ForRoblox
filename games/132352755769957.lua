@@ -138,5 +138,5 @@ Angle = test:CreateSlider({
 	Name = 'Max angle',
 	Min = 1,
 	Max = 360,
-	Default = 360
+	Default = 2
 })

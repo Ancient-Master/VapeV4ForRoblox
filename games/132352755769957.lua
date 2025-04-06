@@ -22,17 +22,19 @@ local entitylib = vape.Libraries.entity
 local targetinfo = vape.Libraries.targetinfo
 local sessioninfo = vape.Libraries.sessioninfo
 local uipallet = vape.Libraries.uipallet
+local entitylib = vape.Libraries.entity
 local tween = vape.Libraries.tween
 local color = vape.Libraries.color
 local whitelist = vape.Libraries.whitelist
 local prediction = vape.Libraries.prediction
 local getcustomasset = vape.Libraries.getcustomasset
+
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local LocalPlayer = Players.LocalPlayer
-local HitmanShared = require(ReplicatedStorage.Features.Hitman.HitmanShared)
-local entitylib = vape.Libraries.entity
 local Namespaces = require(ReplicatedStorage.Service.Namespaces)
+local HitmanShared = require(ReplicatedStorage.Features.Hitman.HitmanShared)
+local LocalPlayer = Players.LocalPlayer
+
 local spin
 local username123
 local Targets
@@ -44,6 +46,8 @@ local Angle
 local AttackRange
 local Max
 local Killaura
+
+
 local function notif(...)
 	return vape:CreateNotification(...)
 end
@@ -106,7 +110,7 @@ notp = spin:CreateToggle({
     end,
     Tooltip = 'Disables teleporting you have to stay near the bounty npc.'
 })
-Killaura = vape.Categories.Combat:CreateModule({
+Killaura = vape.Categories.Blatant:CreateModule({
     Name = 'Killaura',
     Function = function(callback)
         if callback then
